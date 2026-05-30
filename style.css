@@ -1147,3 +1147,18 @@ h1 {
     transform: scale(1.1) rotate(5deg);
     box-shadow: 0 0 25px #fbbf24, 0 5px 20px rgba(0,0,0,0.6) !important;
 }
+
+@keyframes goldPulse {
+    0% { box-shadow: 0 0 5px #fbbf24; border-color: #fbbf24; }
+    50% { box-shadow: 0 0 20px #fbbf24; border-color: #fbbf24; transform: translateY(-50%) scale(1.05); }
+    100% { box-shadow: 0 0 5px #fbbf24; border-color: #fbbf24; }
+}
+
+.ready-to-claim {
+    animation: goldPulse 1.5s infinite ease-in-out;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+    color: #1e1b4b !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    border: 1px solid #fbbf24 !important;
+}

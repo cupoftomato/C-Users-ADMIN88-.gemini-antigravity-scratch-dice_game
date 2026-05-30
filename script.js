@@ -21,6 +21,16 @@ window.sfxVolume = parseFloat(localStorage.getItem('poker_sfx_volume')) || 0.8;
 
 let notesInterval = null;
 
+// Playtime Reward State
+let playTimeSeconds = parseInt(localStorage.getItem('poker_play_time_seconds')) || 0;
+let playTimeLevel = parseInt(localStorage.getItem('poker_play_time_level')) || 0;
+const rewardMilestones = [
+    { name: "5 Min", time: 300, chips: 50 },
+    { name: "15 Min", time: 900, chips: 100 },
+    { name: "45 Min", time: 2700, chips: 500 },
+    { name: "60 Min", time: 3600, chips: 1000 }
+];
+
 function spawnMusicNote() {
     const container = document.getElementById('music-notes-container');
     if (!container) return;
@@ -836,6 +846,7 @@ window.onload = () => {
     initPokerGame(true);
     initCoverDrag();
     setupNavHoverPreviews();
+    startPlayTimeTimer();
 
     // Initialize draggable chat widget
     const chatWidget = document.getElementById('global-chat-widget');
@@ -1646,4 +1657,79 @@ function transferChips() {
     
     amountInput.value = '';
     recipientInput.value = '';
+}
+
+// --- PLAYTIME REWARD SYSTEM ---
+function startPlayTimeTimer() {
+    // Initial render
+    renderPlayTimeUI();
+    
+    setInterval(() => {
+        // Only run if user is active (global stats bar is displayed)
+        const statsBar = document.getElementById('persistent-stats');
+        if (!statsBar || statsBar.style.display === 'none') return;
+        
+        playTimeSeconds++;
+        localStorage.setItem('poker_play_time_seconds', playTimeSeconds);
+        
+        renderPlayTimeUI();
+    }, 1000);
+}
+
+function renderPlayTimeUI() {
+    const counterEl = document.getElementById('play-time-counter');
+    const btnEl = document.getElementById('claim-time-reward-btn');
+    if (!counterEl || !btnEl) return;
+    
+    const milestone = rewardMilestones[playTimeLevel];
+    if (!milestone) return;
+    
+    const formatTime = (secs) => {
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        const s = secs % 60;
+        const pad = (val) => String(val).padStart(2, '0');
+        if (h > 0) return `${pad(h)}:${pad(m)}:${pad(s)}`;
+        return `${pad(m)}:${pad(s)}`;
+    };
+    
+    counterEl.textContent = `${formatTime(playTimeSeconds)} / ${formatTime(milestone.time)}`;
+    
+    if (playTimeSeconds >= milestone.time) {
+        btnEl.disabled = false;
+        btnEl.textContent = `Claim (${milestone.chips})`;
+        btnEl.classList.add('ready-to-claim');
+    } else {
+        btnEl.disabled = true;
+        btnEl.textContent = `Claim (${milestone.chips})`;
+        btnEl.classList.remove('ready-to-claim');
+    }
+}
+
+function claimTimeReward() {
+    const milestone = rewardMilestones[playTimeLevel];
+    if (!milestone || playTimeSeconds < milestone.time) return;
+    
+    // Add chips
+    globalPoints += milestone.chips;
+    updateGlobalStats();
+    if (socket && currentUser) {
+        socket.emit('admin_set_chips', { username: currentUser, chips: globalPoints });
+    }
+    
+    // Confetti effect
+    triggerGoldenCelebration();
+    alert(`Congratulations! You spent ${milestone.name} playing and earned ${milestone.chips} chips!`);
+    
+    // Advance to next milestone level
+    playTimeLevel++;
+    if (playTimeLevel >= rewardMilestones.length) {
+        // Reset and loop back to the 5-minute reward
+        playTimeLevel = 0;
+        playTimeSeconds = 0;
+        localStorage.setItem('poker_play_time_seconds', 0);
+    }
+    
+    localStorage.setItem('poker_play_time_level', playTimeLevel);
+    renderPlayTimeUI();
 }
