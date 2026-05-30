@@ -1,0 +1,5 @@
+=== START SERVER LOCAL ===
+node server.js
+
+=== SHARE LINK WITH FRIENDS ===
+npx localtunnel --port 3000
