@@ -1032,6 +1032,7 @@ function givePlayerChips() {
 let scratchGridSymbols = [];
 let scratchedCount = 0;
 let isScratchGameOver = false;
+let isScratchingInProgress = false;
 
 function openScratchCard() {
     document.getElementById('scratch-modal').style.display = 'flex';
@@ -1045,6 +1046,7 @@ function closeScratchCard() {
 function initScratchCard() {
     scratchedCount = 0;
     isScratchGameOver = false;
+    isScratchingInProgress = false;
     document.getElementById('scratch-result-text').textContent = '';
     document.getElementById('scratch-reset-btn').style.display = 'none';
     
@@ -1108,10 +1110,11 @@ function initScratchCard() {
 }
 
 function scratchCell(index) {
-    if (isScratchGameOver) return;
+    if (isScratchGameOver || isScratchingInProgress) return;
     
     const cover = document.getElementById(`scratch-cover-${index}`);
     if (cover && !cover.classList.contains('scratched')) {
+        isScratchingInProgress = true;
         cover.classList.add('scratched');
         
         // Play click sound using existing slots mechanical click sound context if possible
@@ -1130,6 +1133,7 @@ function scratchCell(index) {
         } catch (err) {}
         
         setTimeout(() => {
+            isScratchingInProgress = false;
             scratchedCount++;
             if (scratchedCount === 9) {
                 checkScratchResult();
