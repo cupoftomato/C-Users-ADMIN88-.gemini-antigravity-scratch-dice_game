@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Royale</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -31,7 +31,7 @@
             <button class="nav-btn" id="nav-poker" onclick="switchGame('poker')">Texas Hold'em</button>
             <button class="nav-btn" id="nav-roulette" onclick="switchGame('roulette')">Roulette</button>
             <button class="nav-btn" id="nav-slots" onclick="switchGame('slots')">Slots</button>
-            <button class="nav-btn" id="nav-ad-btn" style="color: #4ade80; border: 1px solid #4ade80;" onclick="startAd()">Watch Ad (+50)</button>
+            <button class="nav-btn" id="nav-ad-btn" style="color: #4ade80; border: 1px solid #4ade80;" onclick="openScratchCard()">Scratch Card</button>
             <button class="nav-btn" id="nav-admin-btn" style="color: #fbbf24; border: 1px solid #fbbf24; display: none;" onclick="openAdminModal()">Admin</button>
             <button class="nav-btn" id="nav-settings-btn" style="color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);" onclick="toggleSettingsModal()">⚙️ Settings</button>
         </div>
@@ -682,13 +682,24 @@
         </div>
     </div>
 
-    <!-- AD MODAL -->
-    <div id="ad-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 3000; justify-content: center; align-items: center; flex-direction: column;">
-        <h1 style="color: white; margin-bottom: 20px;">Sponsor Message</h1>
-        <img id="ad-cat-img" src="cat1.jpg" style="width: 300px; height: 300px; object-fit: cover; border-radius: 20px; border: 5px solid #fbbf24; margin-bottom: 20px; box-shadow: 0 0 50px rgba(251, 191, 36, 0.5);">
-        <h2 style="color: #fbbf24;">Please watch this adorable cat chewing stuff...</h2>
-        <div style="color: #ef4444; font-size: 2rem; font-weight: bold; margin-top: 20px;">Time left: <span id="ad-timer">25</span>s</div>
-        <button id="close-ad-btn" style="margin-top: 30px; display: none; padding: 10px 30px; font-size: 1.2rem; font-weight: bold; background-color: #3b82f6; color: white; border: 2px solid #60a5fa; border-radius: 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;" onclick="finishAd()">Claim 50 Chips!</button>
+    <!-- SCRATCH CARD MODAL -->
+    <div id="scratch-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); z-index: 3000; justify-content: center; align-items: center; flex-direction: column; color: white; user-select: none;">
+        <div style="background: rgba(30, 41, 59, 0.95); border: 2px solid #fbbf24; border-radius: 24px; padding: 30px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 0 35px rgba(251, 191, 36, 0.4); display: flex; flex-direction: column; align-items: center; gap: 20px; box-sizing: border-box;">
+            <h2 style="margin: 0; color: #fbbf24; text-transform: uppercase; letter-spacing: 1px;">Lucky Scratch Card</h2>
+            <p style="margin: 0; color: #94a3b8; font-size: 0.95rem;">Scratch all 9 spots for free! Match 3 of the same kind to win <span style="color: #fbbf24; font-weight: bold;">40 chips</span>!</p>
+            
+            <!-- 3x3 Grid -->
+            <div id="scratch-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 280px; height: 280px; margin: 10px 0;">
+                <!-- Filled dynamically by JavaScript -->
+            </div>
+            
+            <div id="scratch-result-text" style="font-size: 1.25rem; font-weight: bold; min-height: 1.8rem; color: #34d399; text-transform: uppercase; letter-spacing: 1px;"></div>
+            
+            <div style="display: flex; gap: 15px; width: 100%; justify-content: center;">
+                <button id="scratch-reset-btn" class="bet-btn play-btn" style="flex: 1; max-width: none; display: none;" onclick="initScratchCard()">Play Again</button>
+                <button class="bet-btn xyric-btn" style="flex: 1; max-width: none;" onclick="closeScratchCard()">Close</button>
+            </div>
+        </div>
     </div>
 
     <!-- GLOBAL CHAT WIDGET (FLOATING & DRAGGABLE) -->
@@ -733,10 +744,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="script.js?v=4"></script>
-    <script src="blackjack.js?v=4"></script>
-    <script src="poker.js?v=4"></script>
-    <script src="roulette.js?v=4"></script>
-    <script src="slots.js?v=4"></script>
+    <script src="script.js?v=5"></script>
+    <script src="blackjack.js?v=5"></script>
+    <script src="poker.js?v=5"></script>
+    <script src="roulette.js?v=5"></script>
+    <script src="slots.js?v=5"></script>
 </body>
 </html>

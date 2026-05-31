@@ -28,8 +28,11 @@ const rewardMilestones = [
     { name: "5 Min", time: 300, chips: 50 },
     { name: "15 Min", time: 900, chips: 100 },
     { name: "45 Min", time: 2700, chips: 500 },
-    { name: "60 Min", time: 3600, chips: 1000 }
 ];
+
+// Thrifty Delayed Reveal Payout State
+window.isThriftyBetActive = false;
+window.pendingChipsUpdate = null;
 
 function spawnMusicNote() {
     const container = document.getElementById('music-notes-container');
@@ -431,8 +434,12 @@ function connectMultiplayerServer() {
 
     socket.on('chips_updated', (data) => {
         if (typeof currentUser !== 'undefined' && currentUser && data.username === currentUser) {
-            globalPoints = data.chips;
-            updateGlobalStats();
+            if (activeGame === 'dice' && window.isThriftyBetActive) {
+                window.pendingChipsUpdate = data.chips;
+            } else {
+                globalPoints = data.chips;
+                updateGlobalStats();
+            }
         }
     });
 
@@ -762,6 +769,8 @@ function placeBetDice(type) {
     document.getElementById('bet-xyric').disabled = true;
     
     socket.emit('place_thrifty_bet', { username: currentUser, type: type, amount: amount, streak: globalWinStreak });
+    window.isThriftyBetActive = true;
+    window.pendingChipsUpdate = null;
 }
 
 function skipThriftyReveal() {
@@ -795,6 +804,13 @@ function checkResultDice() {
     if (currentBetTypeDice) {
         let won = (isThrift && currentBetTypeDice === 'thrift') || (!isThrift && currentBetTypeDice === 'xyric');
         processGameResult(won, currentBetAmountDice, 2, 'subtitle-dice', 'reset-btn-dice', true);
+    }
+    
+    window.isThriftyBetActive = false;
+    if (window.pendingChipsUpdate !== null) {
+        globalPoints = window.pendingChipsUpdate;
+        window.pendingChipsUpdate = null;
+        updateGlobalStats();
     }
 }
 
@@ -1010,67 +1026,152 @@ function givePlayerChips() {
     });
 }
 
-// --- AD SYSTEM LOGIC ---
-let adInterval = null;
-let adAudioInterval = null;
-let adAnimationInterval = null;
+// --- SCRATCH CARD LOGIC ---
+let scratchGridSymbols = [];
+let scratchedCount = 0;
+let isScratchGameOver = false;
 
-function startAd() {
-    document.getElementById('ad-modal').style.display = 'flex';
-    document.getElementById('close-ad-btn').style.display = 'none';
-    
-    let timeLeft = 25;
-    const timerSpan = document.getElementById('ad-timer');
-    timerSpan.textContent = timeLeft;
-    
-    const eatSound = document.getElementById('cat-eat-sound');
-    eatSound.volume = window.sfxVolume * 0.2; // Make the chewing sound much quieter
-    eatSound.currentTime = 0;
-    eatSound.play().catch(e => console.log('eat sound play error', e));
-    
-    const catImg = document.getElementById('ad-cat-img');
-    let isMouthOpen = false;
-    
-    // Toggle image every 200ms for chewing animation
-    adAnimationInterval = setInterval(() => {
-        isMouthOpen = !isMouthOpen;
-        catImg.src = isMouthOpen ? 'ad1.jpg.jpg' : 'ad2.jpg.jpg';
-    }, 200);
-    
-    adInterval = setInterval(() => {
-        timeLeft--;
-        timerSpan.textContent = timeLeft;
-        if (timeLeft <= 0) {
-            clearInterval(adInterval);
-            clearInterval(adAudioInterval);
-            document.getElementById('close-ad-btn').style.display = 'block';
-        }
-    }, 1000);
-    
-    adAudioInterval = setInterval(() => {
-        eatSound.currentTime = 0;
-        eatSound.play().catch(e => console.log('eat sound play error', e));
-    }, 1500); // Play chewing every 1.5 seconds while ad runs
+function openScratchCard() {
+    document.getElementById('scratch-modal').style.display = 'flex';
+    initScratchCard();
 }
 
-function finishAd() {
-    document.getElementById('ad-modal').style.display = 'none';
-    if (adInterval) clearInterval(adInterval);
-    if (adAudioInterval) clearInterval(adAudioInterval);
-    if (adAnimationInterval) clearInterval(adAnimationInterval);
+function closeScratchCard() {
+    document.getElementById('scratch-modal').style.display = 'none';
+}
+
+function initScratchCard() {
+    scratchedCount = 0;
+    isScratchGameOver = false;
+    document.getElementById('scratch-result-text').textContent = '';
+    document.getElementById('scratch-reset-btn').style.display = 'none';
     
-    // Reset image to default when done
-    document.getElementById('ad-cat-img').src = 'cat1.jpg';
+    // Determine outcomes: 30% win chance
+    const isWin = Math.random() < 0.3;
+    const pool = ['🍒', '🍋', '🍇', '🍀', '🔔', '👑', '💎', '7', '🍅'];
     
-    globalPoints += 50;
-    updateGlobalStats();
+    scratchGridSymbols = new Array(9).fill(null);
     
-    if (socket && currentUser) {
-        // Sync with backend so we don't lose the chips if we refresh
-        socket.emit('admin_set_chips', { username: currentUser, chips: globalPoints });
+    if (isWin) {
+        // Pick a winning symbol
+        const winningSym = pool[Math.floor(Math.random() * pool.length)];
+        
+        // Place 3 instances randomly
+        let placed = 0;
+        while (placed < 3) {
+            const idx = Math.floor(Math.random() * 9);
+            if (scratchGridSymbols[idx] === null) {
+                scratchGridSymbols[idx] = winningSym;
+                placed++;
+            }
+        }
+        
+        // Fill the remaining 6 slots with other random symbols ensuring no other triple is formed
+        const remainingPool = pool.filter(s => s !== winningSym);
+        for (let i = 0; i < 9; i++) {
+            if (scratchGridSymbols[i] === null) {
+                // Find a symbol that doesn't appear 3 times in the grid yet
+                let symbol;
+                do {
+                    symbol = remainingPool[Math.floor(Math.random() * remainingPool.length)];
+                } while (scratchGridSymbols.filter(s => s === symbol).length >= 2);
+                scratchGridSymbols[i] = symbol;
+            }
+        }
+    } else {
+        // Loss case: ensure no symbol appears 3 or more times
+        for (let i = 0; i < 9; i++) {
+            let symbol;
+            do {
+                symbol = pool[Math.floor(Math.random() * pool.length)];
+            } while (scratchGridSymbols.filter(s => s === symbol).length >= 2);
+            scratchGridSymbols[i] = symbol;
+        }
     }
     
-    alert("Thanks for watching! You earned 50 chips!");
+    // Build HTML grid
+    const gridContainer = document.getElementById('scratch-grid');
+    if (gridContainer) {
+        gridContainer.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'scratch-cell';
+            cell.innerHTML = `
+                <span>${scratchGridSymbols[i]}</span>
+                <div class="scratch-cover" id="scratch-cover-${i}" onclick="scratchCell(${i})">?</div>
+            `;
+            gridContainer.appendChild(cell);
+        }
+    }
+}
+
+function scratchCell(index) {
+    if (isScratchGameOver) return;
+    
+    const cover = document.getElementById(`scratch-cover-${index}`);
+    if (cover && !cover.classList.contains('scratched')) {
+        cover.classList.add('scratched');
+        
+        // Play click sound using existing slots mechanical click sound context if possible
+        try {
+            const audioCtx = window.pokerAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05 * window.sfxVolume, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        } catch (err) {}
+        
+        scratchedCount++;
+        if (scratchedCount === 9) {
+            checkScratchResult();
+        }
+    }
+}
+
+function checkScratchResult() {
+    isScratchGameOver = true;
+    
+    // Find if any symbol has exactly 3 (or more) instances
+    const counts = {};
+    let winningSymbol = null;
+    scratchGridSymbols.forEach(sym => {
+        counts[sym] = (counts[sym] || 0) + 1;
+        if (counts[sym] >= 3) {
+            winningSymbol = sym;
+        }
+    });
+    
+    const resultText = document.getElementById('scratch-result-text');
+    if (resultText) {
+        if (winningSymbol) {
+            // WINNER!
+            resultText.textContent = `🎉 MATCH 3 ${winningSymbol}! YOU WIN 40 CHIPS! 🎉`;
+            resultText.style.color = '#34d399';
+            
+            globalPoints += 40;
+            updateGlobalStats();
+            
+            if (socket && currentUser) {
+                socket.emit('admin_set_chips', { username: currentUser, chips: globalPoints });
+            }
+            
+            // Confetti
+            triggerGoldenCelebration();
+        } else {
+            // LOSER
+            resultText.textContent = '❌ NO MATCH. TRY AGAIN! ❌';
+            resultText.style.color = '#f87171';
+        }
+    }
+    
+    const resetBtn = document.getElementById('scratch-reset-btn');
+    if (resetBtn) resetBtn.style.display = 'block';
 }
 
 // --- CHAT SYSTEM LOGIC ---
@@ -1473,7 +1574,7 @@ const navPreviews = {
     'nav-poker': { title: 'Texas Hold\'em', img: 'poker_nav.png' },
     'nav-roulette': { title: 'Roulette', img: 'roulette_nav.png' },
     'nav-slots': { title: 'Neon Slots', img: 'slots_nav.png' },
-    'nav-ad-btn': { title: 'Watch Ad (+50)', img: 'ads_nav.png' },
+    'nav-ad-btn': { title: 'Lucky Scratch Card', img: 'ads_nav.png' },
     'nav-admin-btn': { title: 'Admin Controls', img: 'admin_nav.png' },
     'nav-settings-btn': { title: 'Audio Settings', img: 'settings_nav.png' }
 };
