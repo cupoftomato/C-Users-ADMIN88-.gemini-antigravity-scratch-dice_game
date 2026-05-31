@@ -26,9 +26,11 @@ let playTimeSeconds = parseInt(localStorage.getItem('poker_play_time_seconds')) 
 let playTimeLevel = parseInt(localStorage.getItem('poker_play_time_level')) || 0;
 const rewardMilestones = [
     { name: "5 Min", time: 300, chips: 50 },
-    { name: "15 Min", time: 900, chips: 100 },
-    { name: "45 Min", time: 2700, chips: 500 },
 ];
+if (playTimeLevel >= rewardMilestones.length) {
+    playTimeLevel = 0;
+    localStorage.setItem('poker_play_time_level', 0);
+}
 
 // Thrifty Delayed Reveal Payout State
 window.isThriftyBetActive = false;
@@ -1127,10 +1129,12 @@ function scratchCell(index) {
             osc.stop(audioCtx.currentTime + 0.08);
         } catch (err) {}
         
-        scratchedCount++;
-        if (scratchedCount === 9) {
-            checkScratchResult();
-        }
+        setTimeout(() => {
+            scratchedCount++;
+            if (scratchedCount === 9) {
+                checkScratchResult();
+            }
+        }, 1500);
     }
 }
 
