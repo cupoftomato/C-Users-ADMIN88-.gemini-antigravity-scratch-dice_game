@@ -658,23 +658,18 @@
                     <div class="track-name" id="current-track-name">Lofi Cat Cafe</div>
                 </div>
                 <div class="music-controls">
-                    <button class="music-ctrl-btn" onclick="prevTrack(event)">⏮</button>
-                    <button class="music-ctrl-btn play-pause-btn" id="music-play-btn" onclick="togglePlayPause(event)">▶</button>
-                    <button class="music-ctrl-btn" onclick="nextTrack(event)">⏭</button>
+                    <button class="music-ctrl-btn play-pause-btn" id="music-play-btn" onclick="toggleYoutubePlayPause(event)">▶</button>
                 </div>
                 <div class="volume-control">
                     <span>🔊</span>
-                    <input type="range" id="music-volume" class="custom-slider" min="0" max="100" value="50" oninput="changeVolume(this.value, event)" onclick="event.stopPropagation()">
+                    <input type="range" id="music-volume" class="custom-slider" min="0" max="100" value="30" oninput="changeYoutubeVolume(this.value, event)" onclick="event.stopPropagation()">
                 </div>
-                <div class="track-list">
-                    <div class="track-item active" onclick="selectTrack(0, event)">Lofi Cat Cafe</div>
-                    <div class="track-item" onclick="selectTrack(1, event)">Jazz & Luck</div>
-                    <div class="track-item" onclick="selectTrack(2, event)">Retro Arcade Spin</div>
+                <div class="track-list" style="padding: 10px; cursor: default;">
+                    <label style="color: #94a3b8; font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px;">Change Music (100 Chips):</label>
+                    <input type="text" id="custom-music-input" class="bet-input" style="width: 100%; box-sizing: border-box; font-size: 0.85rem; padding: 6px; margin-bottom: 8px;" placeholder="Paste YouTube URL" onclick="event.stopPropagation()">
+                    <button class="bet-btn play-btn" style="width: 100%; font-size: 0.8rem; padding: 6px;" onclick="applyCustomMusic(event)">Change Music</button>
                 </div>
             </div>
-            
-            <!-- Audio Element -->
-            <audio id="bg-music-player" loop></audio>
         </div>
     </div>
 

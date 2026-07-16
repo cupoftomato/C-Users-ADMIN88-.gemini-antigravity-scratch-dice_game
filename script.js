@@ -1844,13 +1844,7 @@ function claimTimeReward() {
 }
 
 // --- BACKGROUND MUSIC WIDGET LOGIC ---
-const musicTracks = [
-    { name: "Lofi Cat Cafe", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-    { name: "Jazz & Luck", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-    { name: "Retro Arcade Spin", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
-];
-let currentTrackIndex = 0;
-let isMusicPlaying = false;
+let isYoutubePlaying = false;
 
 function toggleMusicPanel(event) {
     if (event) event.stopPropagation();
@@ -1870,94 +1864,99 @@ window.addEventListener('click', (e) => {
     }
 });
 
-function togglePlayPause(event) {
+function toggleYoutubePlayPause(event) {
     if (event) event.stopPropagation();
-    const player = document.getElementById('bg-music-player');
     const vinylBtn = document.getElementById('vinyl-btn');
     const vinylDisk = document.getElementById('vinyl-disk');
     const playBtn = document.getElementById('music-play-btn');
-    if (!player) return;
 
-    if (isMusicPlaying) {
-        player.pause();
-        isMusicPlaying = false;
+    if (!isBgYtReady || !ytBgPlayer || typeof ytBgPlayer.getPlayerState !== 'function') return;
+
+    const state = ytBgPlayer.getPlayerState();
+    // 1 is PLAYING, 2 is PAUSED
+    if (state === 1 || isYoutubePlaying) {
+        ytBgPlayer.pauseVideo();
+        isYoutubePlaying = false;
         if (vinylBtn) vinylBtn.classList.remove('playing');
         if (vinylDisk) vinylDisk.classList.remove('spinning');
         if (playBtn) playBtn.textContent = '▶';
     } else {
-        // Pause default YouTube music to avoid double audio
-        if (isBgYtReady && ytBgPlayer && typeof ytBgPlayer.pauseVideo === 'function') {
-            try { ytBgPlayer.pauseVideo(); } catch (e) {}
-        }
-        
-        // Load source if not set
-        if (!player.src) {
-            player.src = musicTracks[currentTrackIndex].url;
-            player.volume = (parseFloat(document.getElementById('music-volume').value) || 50) / 100;
-        }
-        
-        player.play().then(() => {
-            isMusicPlaying = true;
-            if (vinylBtn) vinylBtn.classList.add('playing');
-            if (vinylDisk) vinylDisk.classList.add('spinning');
-            if (playBtn) playBtn.textContent = '⏸';
-        }).catch(err => {
-            console.error("Audio playback error:", err);
-        });
-    }
-}
-
-function nextTrack(event) {
-    if (event) event.stopPropagation();
-    currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
-    selectTrack(currentTrackIndex);
-}
-
-function prevTrack(event) {
-    if (event) event.stopPropagation();
-    currentTrackIndex = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
-    selectTrack(currentTrackIndex);
-}
-
-function selectTrack(index, event) {
-    if (event) event.stopPropagation();
-    currentTrackIndex = index;
-    
-    const player = document.getElementById('bg-music-player');
-    const trackNameEl = document.getElementById('current-track-name');
-    const playBtn = document.getElementById('music-play-btn');
-    const vinylBtn = document.getElementById('vinyl-btn');
-    const vinylDisk = document.getElementById('vinyl-disk');
-    if (!player) return;
-
-    player.src = musicTracks[currentTrackIndex].url;
-    if (trackNameEl) trackNameEl.textContent = musicTracks[currentTrackIndex].name;
-
-    // Update active class in track list
-    document.querySelectorAll('.track-list .track-item').forEach((item, idx) => {
-        if (idx === index) item.classList.add('active');
-        else item.classList.remove('active');
-    });
-
-    // Pause default YouTube music to avoid double audio
-    if (isBgYtReady && ytBgPlayer && typeof ytBgPlayer.pauseVideo === 'function') {
-        try { ytBgPlayer.pauseVideo(); } catch (e) {}
-    }
-
-    player.play().then(() => {
-        isMusicPlaying = true;
+        ytBgPlayer.playVideo();
+        isYoutubePlaying = true;
         if (vinylBtn) vinylBtn.classList.add('playing');
         if (vinylDisk) vinylDisk.classList.add('spinning');
         if (playBtn) playBtn.textContent = '⏸';
-    }).catch(err => {
-        console.error("Audio playback error:", err);
-    });
+    }
 }
 
-function changeVolume(val, event) {
+function changeYoutubeVolume(val, event) {
     if (event) event.stopPropagation();
-    const player = document.getElementById('bg-music-player');
-    if (player) {
-        player.volume = parseFloat(val) / 100;
+    if (isBgYtReady && ytBgPlayer && typeof ytBgPlayer.setVolume === 'function') {
+        ytBgPlayer.setVolume(parseInt(val));
+    }
+}
+
+function applyCustomMusic(event) {
+    if (event) event.stopPropagation();
+    
+    const inputEl = document.getElementById('custom-music-input');
+    const url = inputEl.value.trim();
+    if (!url) {
+        alert("Please paste a valid YouTube URL first!");
+        return;
+    }
+
+    if (globalPoints < 100) {
+        alert("You need at least 100 chips to change the background music!");
+        return;
+    }
+
+    // Extract Video ID from URL
+    let videoId = null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+        videoId = match[2];
+    } else {
+        // Assume they just pasted the ID directly if it's exactly 11 chars
+        if (url.length === 11) {
+            videoId = url;
+        } else {
+            alert("Could not detect a valid YouTube Video ID from that link.");
+            return;
+        }
+    }
+
+    // Deduct points instantly and silently
+    globalPoints -= 100;
+    updateGlobalStats();
+    
+    // Update track name visually to Custom Link
+    const trackNameEl = document.getElementById('current-track-name');
+    if (trackNameEl) trackNameEl.textContent = "Custom YouTube Link";
+
+    // Load new video into YouTube Background player
+    if (isBgYtReady && ytBgPlayer && typeof ytBgPlayer.loadVideoById === 'function') {
+        ytBgPlayer.loadVideoById({
+            'videoId': videoId,
+            'startSeconds': 0
+        });
+        
+        // Ensure UI updates to playing state
+        isYoutubePlaying = true;
+        const vinylBtn = document.getElementById('vinyl-btn');
+        const vinylDisk = document.getElementById('vinyl-disk');
+        const playBtn = document.getElementById('music-play-btn');
+        
+        if (vinylBtn) vinylBtn.classList.add('playing');
+        if (vinylDisk) vinylDisk.classList.add('spinning');
+        if (playBtn) playBtn.textContent = '⏸';
+        
+        inputEl.value = ''; // clear input
+    } else {
+        alert("Background music player is not ready yet!");
+        // Refund chips
+        globalPoints += 100;
+        updateGlobalStats();
     }
 }
