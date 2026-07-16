@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Royale</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=6">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -624,12 +624,58 @@
         </div>
     </div>
 
-    <!-- Cat Corner -->
-    <div id="cat-corner" style="position: fixed; bottom: 20px; left: 20px; text-align: center; z-index: 400; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));">
-        <img id="cat-img" src="cat1.jpg" onclick="openSavingsModal()" style="width: 120px; height: 120px; object-fit: cover; border-radius: 20%; border: 4px solid #fbbf24; transition: all 0.2s ease; cursor: pointer;">
-        <br>
-        <button class="bet-btn play-btn" id="feed-cat-btn" onclick="feedCat()" style="padding: 6px 12px; font-size: 0.9rem; margin-top: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">Feed (10 Chips)</button>
-        <audio id="cat-eat-sound" src="eat.mp3" preload="auto"></audio>
+    <!-- Cat Corner & Music Selector -->
+    <div id="cat-corner" style="position: fixed; bottom: 20px; left: 20px; z-index: 400; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); display: flex; align-items: center; gap: 15px; user-select: none;">
+        <div style="text-align: center;">
+            <img id="cat-img" src="cat1.jpg" onclick="openSavingsModal()" style="width: 120px; height: 120px; object-fit: cover; border-radius: 20%; border: 4px solid #fbbf24; transition: all 0.2s ease; cursor: pointer;">
+            <br>
+            <button class="bet-btn play-btn" id="feed-cat-btn" onclick="feedCat()" style="padding: 6px 12px; font-size: 0.9rem; margin-top: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); width: 100%;">Feed (10 Chips)</button>
+            <audio id="cat-eat-sound" src="eat.mp3" preload="auto"></audio>
+        </div>
+        
+        <!-- Background Music Selector Widget -->
+        <div id="music-widget" class="music-widget">
+            <!-- Vinyl Record Player Button -->
+            <div class="vinyl-container" id="vinyl-btn" onclick="toggleMusicPanel(event)">
+                <div class="gramophone-needle"></div>
+                <div class="vinyl-disk" id="vinyl-disk">
+                    <div class="vinyl-groove"></div>
+                    <div class="vinyl-label"></div>
+                </div>
+            </div>
+            
+            <!-- Selection Panel -->
+            <div class="music-panel" id="music-panel">
+                <div class="music-panel-header">
+                    <h4>Background Music</h4>
+                </div>
+                <div class="track-info">
+                    <div class="music-equalizer" id="equalizer">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="track-name" id="current-track-name">Lofi Cat Cafe</div>
+                </div>
+                <div class="music-controls">
+                    <button class="music-ctrl-btn" onclick="prevTrack(event)">⏮</button>
+                    <button class="music-ctrl-btn play-pause-btn" id="music-play-btn" onclick="togglePlayPause(event)">▶</button>
+                    <button class="music-ctrl-btn" onclick="nextTrack(event)">⏭</button>
+                </div>
+                <div class="volume-control">
+                    <span>🔊</span>
+                    <input type="range" id="music-volume" class="custom-slider" min="0" max="100" value="50" oninput="changeVolume(this.value, event)" onclick="event.stopPropagation()">
+                </div>
+                <div class="track-list">
+                    <div class="track-item active" onclick="selectTrack(0, event)">Lofi Cat Cafe</div>
+                    <div class="track-item" onclick="selectTrack(1, event)">Jazz & Luck</div>
+                    <div class="track-item" onclick="selectTrack(2, event)">Retro Arcade Spin</div>
+                </div>
+            </div>
+            
+            <!-- Audio Element -->
+            <audio id="bg-music-player" loop></audio>
+        </div>
     </div>
 
     <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center;">

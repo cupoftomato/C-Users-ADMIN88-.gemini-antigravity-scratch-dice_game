@@ -1209,3 +1209,276 @@ h1 {
     transform: scale(0.7) rotate(15deg);
     pointer-events: none;
 }
+
+/* Vintage Vinyl Music Widget */
+.music-widget {
+    position: relative;
+    display: inline-block;
+}
+
+.vinyl-container {
+    width: 70px;
+    height: 70px;
+    background: radial-gradient(circle, #5c4033 0%, #2f1f17 100%);
+    border: 3px solid #fbbf24;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+}
+
+.vinyl-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+}
+
+.vinyl-disk {
+    width: 54px;
+    height: 54px;
+    background: radial-gradient(circle, #222 30%, #050505 70%);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Concentric groove lines on vinyl */
+.vinyl-groove {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+}
+
+.vinyl-groove::before {
+    content: '';
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+}
+
+.vinyl-label {
+    width: 18px;
+    height: 18px;
+    background: #fbbf24;
+    border-radius: 50%;
+    border: 2px solid #111;
+    position: relative;
+}
+
+.vinyl-label::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #111;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Gramophone needle */
+.gramophone-needle {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 25px;
+    border-left: 2px solid #e5e7eb;
+    border-bottom: 2px solid #e5e7eb;
+    border-bottom-left-radius: 4px;
+    transform-origin: top right;
+    transform: rotate(0deg);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.vinyl-container.playing .gramophone-needle {
+    transform: rotate(18deg);
+}
+
+.vinyl-disk.spinning {
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Sleek Music Panel Overlay */
+.music-panel {
+    display: none; /* Controlled by display toggle */
+    position: absolute;
+    bottom: 85px;
+    left: 0;
+    width: 250px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border: 2px solid #fbbf24;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.8), 0 0 15px rgba(251, 191, 36, 0.15);
+    z-index: 500;
+    flex-direction: column;
+    gap: 12px;
+    animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.music-panel-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 6px;
+}
+
+.track-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,0,0,0.25);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.track-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+/* Equalizer effect when playing */
+.music-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    width: 15px;
+    height: 15px;
+}
+
+.music-equalizer .bar {
+    width: 3px;
+    height: 100%;
+    background-color: #fbbf24;
+    border-radius: 1px;
+    transform-origin: bottom;
+}
+
+.vinyl-container.playing ~ .music-panel .music-equalizer .bar:nth-child(1) { animation: eqBar 0.8s ease-in-out infinite alternate; }
+.vinyl-container.playing ~ .music-panel .music-equalizer .bar:nth-child(2) { animation: eqBar 0.5s ease-in-out infinite alternate 0.15s; }
+.vinyl-container.playing ~ .music-panel .music-equalizer .bar:nth-child(3) { animation: eqBar 0.7s ease-in-out infinite alternate 0.3s; }
+
+@keyframes eqBar {
+    0% { transform: scaleY(0.2); }
+    100% { transform: scaleY(1); }
+}
+
+.music-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.music-ctrl-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #94a3b8;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.music-ctrl-btn:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    transform: scale(1.05);
+}
+
+.music-ctrl-btn.play-pause-btn {
+    background: #fbbf24;
+    color: #1e1b4b;
+    border: none;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+}
+
+.music-ctrl-btn.play-pause-btn:hover {
+    background: #f59e0b;
+    transform: scale(1.1);
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 5px;
+}
+
+.volume-control span {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 100px;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 10px;
+}
+
+.track-item {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+.track-item.active {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    font-weight: bold;
+}
