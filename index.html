@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Royale</title>
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -139,13 +139,8 @@
         <!-- 2.5D BAR MENU VIEW -->
         <div id="view-bar" class="game-view block-view">
             <div class="bar-scene">
-                <!-- Banner: Hidden by default, unfolds on hover -->
-                <div id="bar-game-banner" class="game-banner">
-                    <h2 id="bar-banner-title">Select a Drink</h2>
-                </div>
-
                 <!-- Layer 1: Background Wine Cabinet -->
-                <img src="bar_bg.png?v=8" class="bar-layer layer-bg" alt="Wine Cabinet">
+                <img src="bar_bg_v2.png?v=2" class="bar-layer layer-bg" alt="Wine Cabinet">
                 
                 <!-- Interactive Bottles Overlay -->
                 <!-- We will map 5 bottles. Guessing coordinates based on common shelf layouts -->
@@ -157,8 +152,15 @@
 
                 <!-- Layer 2: Bartender Cat -->
                 <div class="bar-layer layer-mid">
+                    <!-- Banner: Hidden by default, unfolds on hover -->
+                    <div id="bar-game-banner" class="game-banner">
+                        <h2 id="bar-banner-title">Select a Drink</h2>
+                    </div>
+
                     <div class="bartender-dialogue" id="bartender-speech">Whatcha wanna drink?</div>
-                    <img src="admin_nav.png" alt="Bankeeper" class="bartender-cat" onclick="openBank()">
+                    <div class="bartender-frame">
+                        <img src="cat2.png" alt="Bankeeper" class="bartender-cat" onclick="openBank()">
+                    </div>
                 </div>
 
                 <!-- Layer 3: Foreground Wooden Counter & Sliding Glass -->
@@ -168,6 +170,8 @@
                         <img src="wine_glass.svg" id="sliding-glass" class="sliding-glass" style="display: none;" alt="Drink">
                     </div>
                 </div>
+                
+                <!-- Layer 4: This is handled globally (nav, stats, music) via z-index -->
             </div>
             
             <!-- Fullscreen Drink Transition Overlay -->
