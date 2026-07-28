@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Royale</title>
-    <link rel="stylesheet" href="style.css?v=11">
+    <link rel="stylesheet" href="style.css?v=12">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -144,11 +144,21 @@
                 
                 <!-- Interactive Bottles Overlay -->
                 <!-- We will map 5 bottles. Guessing coordinates based on common shelf layouts -->
-                <div class="bottle-hotspot" style="bottom: 40%; left: 10%;" onclick="prepareDrink('dice')" onmouseover="showBanner('Thrifty (Dice)')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 40%; left: 30%;" onclick="prepareDrink('blackjack')" onmouseover="showBanner('Blackjack')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 40%; left: 50%;" onclick="prepareDrink('poker')" onmouseover="showBanner('Texas Hold\'em')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 40%; left: 70%;" onclick="prepareDrink('roulette')" onmouseover="showBanner('Roulette')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 40%; left: 90%;" onclick="prepareDrink('slots')" onmouseover="showBanner('Slots')" onmouseout="hideBanner()"></div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 10%;" onclick="prepareDrink('dice')" onmouseover="showBanner('Thrifty (Dice)')" onmouseout="hideBanner()">
+                    <img src="simple_bottle.png?v=1" alt="Bottle" class="bottle-img">
+                </div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 30%;" onclick="prepareDrink('blackjack')" onmouseover="showBanner('Blackjack')" onmouseout="hideBanner()">
+                    <img src="simple_bottle.png?v=1" alt="Bottle" class="bottle-img" style="filter: hue-rotate(90deg);">
+                </div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 50%;" onclick="prepareDrink('poker')" onmouseover="showBanner('Texas Hold\'em')" onmouseout="hideBanner()">
+                    <img src="simple_bottle.png?v=1" alt="Bottle" class="bottle-img" style="filter: hue-rotate(180deg);">
+                </div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 70%;" onclick="prepareDrink('roulette')" onmouseover="showBanner('Roulette')" onmouseout="hideBanner()">
+                    <img src="simple_bottle.png?v=1" alt="Bottle" class="bottle-img" style="filter: hue-rotate(270deg);">
+                </div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 90%;" onclick="prepareDrink('slots')" onmouseover="showBanner('Slots')" onmouseout="hideBanner()">
+                    <img src="simple_bottle.png?v=1" alt="Bottle" class="bottle-img" style="filter: hue-rotate(45deg);">
+                </div>
 
                 <!-- Layer 2: Bartender Cat -->
                 <div class="bar-layer layer-mid">
@@ -159,7 +169,7 @@
 
                     <div class="bartender-dialogue" id="bartender-speech">Whatcha wanna drink?</div>
                     <div class="bartender-frame">
-                        <img src="bartender_cat.png?v=1" alt="Bartender" class="bartender-cat" onclick="openBank()">
+                        <img src="cat2.png" alt="Bartender" class="bartender-cat" onclick="openBank()">
                     </div>
                 </div>
 
