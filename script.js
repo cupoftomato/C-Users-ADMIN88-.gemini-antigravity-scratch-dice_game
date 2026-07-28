@@ -230,15 +230,20 @@ function drinkAndSwitch(game) {
     }
     
     const transGlass = document.getElementById('transition-glass');
-    if (transGlass) {
+    const wineSplash = document.getElementById('wine-splash');
+    
+    if (transGlass && wineSplash) {
         // Position glass initially
         transGlass.style.display = 'block';
         transGlass.classList.remove('drink-anim');
+        wineSplash.style.display = 'block';
+        wineSplash.classList.remove('splash-anim');
+        wineSplash.style.opacity = '0';
         
         // Start from center bottom
         transGlass.style.bottom = '10vh';
         transGlass.style.left = '50%';
-        transGlass.style.transform = 'translate(-50%, 0) scale(1)';
+        transGlass.style.transform = 'translate(-50%, 0) scale(1) rotate(0deg)';
         transGlass.style.opacity = '1';
         
         // Force reflow
@@ -246,21 +251,26 @@ function drinkAndSwitch(game) {
         
         // Add animation class
         transGlass.classList.add('drink-anim');
+        wineSplash.classList.add('splash-anim');
         
         // Wait for it to cover the screen, then switch game
         setTimeout(() => {
             switchGame(game);
             
-            // Fade out the glass
-            setTimeout(() => {
-                transGlass.style.opacity = '0';
-                setTimeout(() => {
-                    transGlass.style.display = 'none';
-                    transGlass.classList.remove('drink-anim');
-                }, 500);
-            }, 500);
+            // Fade out the glass immediately since the screen is red
+            transGlass.style.display = 'none';
+            transGlass.classList.remove('drink-anim');
             
-        }, 1200); // Wait 1.2s to cover screen
+            // Fade out the splash
+            setTimeout(() => {
+                wineSplash.style.opacity = '0';
+                wineSplash.classList.remove('splash-anim');
+                setTimeout(() => {
+                    wineSplash.style.display = 'none';
+                }, 500);
+            }, 500); // stay red for 0.5s then fade out
+            
+        }, 1000); // Wait 1.0s to cover screen
     } else {
         switchGame(game);
     }

@@ -1599,6 +1599,32 @@ h1 {
     transition: all 1.5s cubic-bezier(0.86, 0, 0.07, 1);
 }
 .drink-anim {
-    transform: scale(40) translateY(10vh);
-    opacity: 0;
+    animation: pourGlass 1.2s cubic-bezier(0.86, 0, 0.07, 1) forwards;
+}
+
+@keyframes pourGlass {
+    0% {
+        transform: translate(-50%, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    40% {
+        transform: translate(-50%, -40vh) scale(3) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        /* Tilt towards screen and scale massively */
+        transform: translate(-50%, -40vh) scale(20) rotate(-60deg);
+        opacity: 0;
+    }
+}
+
+.splash-anim {
+    animation: wineSplash 1.2s ease-in forwards;
+}
+
+@keyframes wineSplash {
+    0% { opacity: 0; }
+    60% { opacity: 0; }
+    80% { opacity: 1; }
+    100% { opacity: 1; }
 }

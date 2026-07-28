@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150">
+  <defs>
+    <linearGradient id="wineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b91c1c" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    <linearGradient id="glassReflect" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.4)" />
+      <stop offset="20%" stop-color="rgba(255,255,255,0.1)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Stem and Base -->
+  <path d="M45,90 L45,140 L30,145 L70,145 L55,140 L55,90 Z" fill="#e2e8f0" />
+  
+  <!-- Glass Bowl -->
+  <path d="M20,10 C20,10 20,60 50,90 C80,60 80,10 80,10 Z" fill="rgba(255,255,255,0.2)" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Red Wine -->
+  <path d="M22,40 C22,40 25,65 50,88 C75,65 78,40 78,40 C60,45 40,45 22,40 Z" fill="url(#wineGrad)" />
+  
+  <!-- Reflection -->
+  <path d="M22,12 C22,12 22,50 45,75 L35,15 Z" fill="url(#glassReflect)" />
+</svg>

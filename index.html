@@ -148,29 +148,29 @@
                     <div class="bar-counter">
                         <div class="glass-container" onclick="drinkAndSwitch('dice')">
                             <div class="glass-tooltip">Thrifty (Dice)</div>
-                            <img src="wine_glass.png" class="wine-glass" alt="Dice">
+                            <img src="wine_glass.svg" class="wine-glass" alt="Dice">
                         </div>
                         <div class="glass-container" onclick="drinkAndSwitch('blackjack')">
                             <div class="glass-tooltip">Blackjack</div>
-                            <img src="wine_glass.png" class="wine-glass" alt="Blackjack">
+                            <img src="wine_glass.svg" class="wine-glass" alt="Blackjack">
                         </div>
                         <div class="glass-container" onclick="drinkAndSwitch('poker')">
                             <div class="glass-tooltip">Texas Hold'em</div>
-                            <img src="wine_glass.png" class="wine-glass" alt="Poker">
+                            <img src="wine_glass.svg" class="wine-glass" alt="Poker">
                         </div>
                         <div class="glass-container" onclick="drinkAndSwitch('roulette')">
                             <div class="glass-tooltip">Roulette</div>
-                            <img src="wine_glass.png" class="wine-glass" alt="Roulette">
+                            <img src="wine_glass.svg" class="wine-glass" alt="Roulette">
                         </div>
                         <div class="glass-container" onclick="drinkAndSwitch('slots')">
                             <div class="glass-tooltip">Slots</div>
-                            <img src="wine_glass.png" class="wine-glass" alt="Slots">
+                            <img src="wine_glass.svg" class="wine-glass" alt="Slots">
                         </div>
                     </div>
                 </div>
                 
                 <!-- The Drinking Glass Transition Overlay -->
-                <img src="wine_glass.png" id="transition-glass" style="display: none;">
+                <img src="wine_glass.svg" id="transition-glass" style="display: none;">
             </div>
         </div>
 
@@ -829,5 +829,9 @@
     <script src="poker.js?v=5"></script>
     <script src="roulette.js?v=5"></script>
     <script src="slots.js?v=5"></script>
+    
+    <!-- Drink Transition Elements -->
+    <img id="transition-glass" src="wine_glass.svg" style="display: none; position: fixed; z-index: 9999; pointer-events: none;">
+    <div id="wine-splash" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #b91c1c; z-index: 9998; pointer-events: none;"></div>
 </body>
 </html>
