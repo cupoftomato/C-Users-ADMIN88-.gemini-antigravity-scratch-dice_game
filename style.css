@@ -1498,8 +1498,8 @@ h1 {
     height: 100%;
 }
 .layer-bg {
-    background-size: cover;
-    background-position: bottom center;
+    object-fit: cover;
+    object-position: bottom center;
     z-index: 1;
     filter: brightness(0.7);
 }
