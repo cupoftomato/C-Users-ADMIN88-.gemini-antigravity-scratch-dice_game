@@ -221,56 +221,82 @@ function switchGame(game) {
 }
 
 function drinkAndSwitch(game) {
-    // Play sound if unlocked
-    const eatSound = document.getElementById('cat-eat-sound');
-    if (eatSound) {
-        eatSound.currentTime = 0;
-        eatSound.volume = window.sfxVolume || 0.8;
-        eatSound.play().catch(e => console.log('Sound error', e));
-    }
-    
+    const catImg = document.querySelector('.bartender-cat');
+    const glasses = document.querySelectorAll('.glass-container');
     const transGlass = document.getElementById('transition-glass');
     const wineSplash = document.getElementById('wine-splash');
     
-    if (transGlass && wineSplash) {
-        // Position glass initially
-        transGlass.style.display = 'block';
-        transGlass.classList.remove('drink-anim');
-        wineSplash.style.display = 'block';
-        wineSplash.classList.remove('splash-anim');
-        wineSplash.style.opacity = '0';
-        
-        // Start from center bottom
-        transGlass.style.bottom = '10vh';
-        transGlass.style.left = '50%';
-        transGlass.style.transform = 'translate(-50%, 0) scale(1) rotate(0deg)';
-        transGlass.style.opacity = '1';
-        
-        // Force reflow
-        void transGlass.offsetWidth;
-        
-        // Add animation class
-        transGlass.classList.add('drink-anim');
-        wineSplash.classList.add('splash-anim');
-        
-        // Wait for it to cover the screen, then switch game
+    if (transGlass && wineSplash && catImg) {
+        // 1. Hide the options
+        glasses.forEach(g => {
+            g.style.transition = 'opacity 0.3s';
+            g.style.opacity = '0';
+            g.style.pointerEvents = 'none';
+        });
+
+        // 2. Shake bartender
+        catImg.classList.add('shake-bartender');
+
+        // Play shaking/eating sound to simulate cocktail shaking
+        const eatSound = document.getElementById('cat-eat-sound');
+        if (eatSound) {
+            eatSound.currentTime = 0;
+            eatSound.volume = window.sfxVolume || 0.8;
+            eatSound.play().catch(e => console.log('Sound error', e));
+        }
+
         setTimeout(() => {
-            switchGame(game);
+            catImg.classList.remove('shake-bartender');
             
-            // Fade out the glass immediately since the screen is red
-            transGlass.style.display = 'none';
-            transGlass.classList.remove('drink-anim');
+            // 3. Slide the transition glass in from right
+            transGlass.style.display = 'block';
+            transGlass.classList.remove('drink-anim', 'slide-glass-in');
+            transGlass.style.bottom = '10vh';
+            transGlass.style.left = '50%';
             
-            // Fade out the splash
+            wineSplash.style.display = 'block';
+            wineSplash.classList.remove('splash-anim');
+            wineSplash.style.opacity = '0';
+            
+            void transGlass.offsetWidth; // Force reflow
+            
+            transGlass.classList.add('slide-glass-in');
+
+            // Wait 1s for slide to finish
             setTimeout(() => {
-                wineSplash.style.opacity = '0';
-                wineSplash.classList.remove('splash-anim');
+                if (eatSound) {
+                    eatSound.currentTime = 0;
+                    eatSound.play().catch(e => console.log('Sound error', e));
+                }
+
+                transGlass.classList.remove('slide-glass-in');
+                transGlass.classList.add('drink-anim');
+                wineSplash.classList.add('splash-anim');
+
+                // Wait 1s for pour to cover screen
                 setTimeout(() => {
-                    wineSplash.style.display = 'none';
-                }, 500);
-            }, 500); // stay red for 0.5s then fade out
-            
-        }, 1000); // Wait 1.0s to cover screen
+                    switchGame(game);
+                    
+                    // Reset menu
+                    glasses.forEach(g => {
+                        g.style.opacity = '1';
+                        g.style.pointerEvents = 'auto';
+                    });
+                    
+                    transGlass.style.display = 'none';
+                    transGlass.classList.remove('drink-anim');
+                    
+                    setTimeout(() => {
+                        wineSplash.style.opacity = '0';
+                        wineSplash.classList.remove('splash-anim');
+                        setTimeout(() => {
+                            wineSplash.style.display = 'none';
+                        }, 500);
+                    }, 500);
+                    
+                }, 1000);
+            }, 1000);
+        }, 1500); // 1.5s shake time
     } else {
         switchGame(game);
     }
