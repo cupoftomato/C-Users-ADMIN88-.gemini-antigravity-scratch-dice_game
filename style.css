@@ -1540,16 +1540,16 @@ h1 {
     justify-content: center;
 }
 .bar-counter {
+    position: absolute;
+    bottom: 0;
     width: 100%;
-    height: 25vh;
-    background: linear-gradient(to bottom, #4a2e15, #2a1607);
-    border-top: 10px solid #6b4423;
+    height: 15vh;
+    background: transparent;
+    border-top: none;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 20px;
-    gap: 40px;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+    justify-content: space-around;
+    align-items: flex-end;
+    padding-bottom: 2vh;
 }
 .glass-container {
     position: relative;
