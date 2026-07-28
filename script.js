@@ -174,28 +174,16 @@ function updateGlobalStats() {
 
 function switchGame(game) {
     activeGame = game;
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`nav-${game}`).classList.add('active');
     
     document.querySelectorAll('.game-view').forEach(view => view.classList.remove('active-view'));
     document.getElementById(`view-${game}`).classList.add('active-view');
     
-    // Hide global nav when in bar or auth, show it when in a game
-    const nav = document.getElementById('global-nav');
-    if (nav) {
-        if (game === 'bar' || game === 'auth') {
-            nav.style.display = 'none';
-        } else {
-            nav.style.display = 'flex';
-        }
-    }
-    
-    // Ensure persistent stats are visible when playing (or in bar)
+    // Ensure persistent stats are visible when playing
     const persistentStats = document.getElementById('persistent-stats');
     if (persistentStats) {
-        if (game === 'auth') {
-            persistentStats.style.display = 'none';
-        } else {
-            persistentStats.style.display = 'flex';
-        }
+        persistentStats.style.display = 'flex';
     }
     
     if (game === 'dice') {
@@ -217,88 +205,6 @@ function switchGame(game) {
         if (typeof initSlotsGame === 'function') initSlotsGame();
     } else {
         moveBetLogWidget(null); // hide
-    }
-}
-
-function drinkAndSwitch(game) {
-    const catImg = document.querySelector('.bartender-cat');
-    const glasses = document.querySelectorAll('.glass-container');
-    const transGlass = document.getElementById('transition-glass');
-    const wineSplash = document.getElementById('wine-splash');
-    
-    if (transGlass && wineSplash && catImg) {
-        // 1. Hide the options
-        glasses.forEach(g => {
-            g.style.transition = 'opacity 0.3s';
-            g.style.opacity = '0';
-            g.style.pointerEvents = 'none';
-        });
-
-        // 2. Shake bartender
-        catImg.classList.add('shake-bartender');
-
-        // Play shaking/eating sound to simulate cocktail shaking
-        const eatSound = document.getElementById('cat-eat-sound');
-        if (eatSound) {
-            eatSound.currentTime = 0;
-            eatSound.volume = window.sfxVolume || 0.8;
-            eatSound.play().catch(e => console.log('Sound error', e));
-        }
-
-        setTimeout(() => {
-            catImg.classList.remove('shake-bartender');
-            
-            // 3. Slide the transition glass in from right
-            transGlass.style.display = 'block';
-            transGlass.classList.remove('drink-anim', 'slide-glass-in');
-            transGlass.style.bottom = '10vh';
-            transGlass.style.left = '50%';
-            
-            wineSplash.style.display = 'block';
-            wineSplash.classList.remove('splash-anim');
-            wineSplash.style.opacity = '0';
-            
-            void transGlass.offsetWidth; // Force reflow
-            
-            transGlass.classList.add('slide-glass-in');
-
-            // Wait 1s for slide to finish
-            setTimeout(() => {
-                if (eatSound) {
-                    eatSound.currentTime = 0;
-                    eatSound.play().catch(e => console.log('Sound error', e));
-                }
-
-                transGlass.classList.remove('slide-glass-in');
-                transGlass.classList.add('drink-anim');
-                wineSplash.classList.add('splash-anim');
-
-                // Wait 1s for pour to cover screen
-                setTimeout(() => {
-                    switchGame(game);
-                    
-                    // Reset menu
-                    glasses.forEach(g => {
-                        g.style.opacity = '1';
-                        g.style.pointerEvents = 'auto';
-                    });
-                    
-                    transGlass.style.display = 'none';
-                    transGlass.classList.remove('drink-anim');
-                    
-                    setTimeout(() => {
-                        wineSplash.style.opacity = '0';
-                        wineSplash.classList.remove('splash-anim');
-                        setTimeout(() => {
-                            wineSplash.style.display = 'none';
-                        }, 500);
-                    }, 500);
-                    
-                }, 1000);
-            }, 1000);
-        }, 1500); // 1.5s shake time
-    } else {
-        switchGame(game);
     }
 }
 
@@ -925,7 +831,7 @@ window.onload = () => {
         
         document.getElementById('view-auth').classList.remove('active-view');
         document.getElementById('global-nav').style.display = 'flex';
-        switchGame('bar');
+        switchGame('dice');
         
         if (currentUser.toLowerCase() === 'cupoftomato') {
             document.getElementById('nav-admin-btn').style.display = 'inline-block';

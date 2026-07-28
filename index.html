@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Royale</title>
-    <link rel="stylesheet" href="style.css?v=7?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -26,7 +26,11 @@
     <nav class="top-nav" id="global-nav" style="display: none;">
         <div class="nav-brand">Casino Royale</div>
         <div class="nav-links">
-            <button class="nav-btn" style="color: #fbbf24; border: 1px solid #fbbf24;" onclick="switchGame('bar')">🍷 Back to Bar</button>
+            <button class="nav-btn active" id="nav-dice" onclick="switchGame('dice')">Thrifty</button>
+            <button class="nav-btn" id="nav-blackjack" onclick="switchGame('blackjack')">Blackjack</button>
+            <button class="nav-btn" id="nav-poker" onclick="switchGame('poker')">Texas Hold'em</button>
+            <button class="nav-btn" id="nav-roulette" onclick="switchGame('roulette')">Roulette</button>
+            <button class="nav-btn" id="nav-slots" onclick="switchGame('slots')">Slots</button>
             <button class="nav-btn" id="nav-ad-btn" style="color: #4ade80; border: 1px solid #4ade80;" onclick="openScratchCard()">Scratch Card</button>
             <button class="nav-btn" id="nav-admin-btn" style="color: #fbbf24; border: 1px solid #fbbf24; display: none;" onclick="openAdminModal()">Admin</button>
             <button class="nav-btn" id="nav-settings-btn" style="color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);" onclick="toggleSettingsModal()">⚙️ Settings</button>
@@ -128,49 +132,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- 2.5D BAR MENU VIEW -->
-        <div id="view-bar" class="game-view" style="padding: 0;">
-            <div class="bar-scene">
-                <!-- Layer 1: Background Wine Cabinet -->
-        <img src="bar_bg.png?v=5" class="bar-layer layer-bg">
-                
-                <!-- Layer 2: Bartender Cat -->
-                <div class="bar-layer layer-mid">
-                    <img src="admin_nav.png" alt="Bartender Cat" class="bartender-cat" onclick="openSavingsModal()">
-                    <div class="bartender-dialogue">Whatcha wanna drink?</div>
-                </div>
-                
-                <!-- Layer 3: Wooden Counter & Wine Glasses -->
-                <div class="bar-layer layer-front">
-                    <div class="bar-counter">
-                        <div class="glass-container" onclick="drinkAndSwitch('dice')">
-                            <div class="glass-tooltip">Thrifty (Dice)</div>
-                            <img src="wine_glass.svg" class="wine-glass" alt="Dice">
-                        </div>
-                        <div class="glass-container" onclick="drinkAndSwitch('blackjack')">
-                            <div class="glass-tooltip">Blackjack</div>
-                            <img src="wine_glass.svg" class="wine-glass" alt="Blackjack">
-                        </div>
-                        <div class="glass-container" onclick="drinkAndSwitch('poker')">
-                            <div class="glass-tooltip">Texas Hold'em</div>
-                            <img src="wine_glass.svg" class="wine-glass" alt="Poker">
-                        </div>
-                        <div class="glass-container" onclick="drinkAndSwitch('roulette')">
-                            <div class="glass-tooltip">Roulette</div>
-                            <img src="wine_glass.svg" class="wine-glass" alt="Roulette">
-                        </div>
-                        <div class="glass-container" onclick="drinkAndSwitch('slots')">
-                            <div class="glass-tooltip">Slots</div>
-                            <img src="wine_glass.svg" class="wine-glass" alt="Slots">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- The Drinking Glass Transition Overlay -->
-                <img src="wine_glass.svg" id="transition-glass" style="display: none;">
             </div>
         </div>
 
@@ -666,7 +627,7 @@
     <!-- Cat Corner & Music Selector -->
     <div id="cat-corner" style="position: fixed; bottom: 20px; left: 20px; z-index: 400; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); display: flex; align-items: center; gap: 15px; user-select: none;">
         <div style="text-align: center;">
-            <img id="cat-img" src="admin_nav.png" onclick="openSavingsModal()" style="width: 120px; height: 120px; object-fit: cover; border-radius: 20%; border: 4px solid #fbbf24; transition: all 0.2s ease; cursor: pointer;">
+            <img id="cat-img" src="cat1.jpg" onclick="openSavingsModal()" style="width: 120px; height: 120px; object-fit: cover; border-radius: 20%; border: 4px solid #fbbf24; transition: all 0.2s ease; cursor: pointer;">
             <br>
             <button class="bet-btn play-btn" id="feed-cat-btn" onclick="feedCat()" style="padding: 6px 12px; font-size: 0.9rem; margin-top: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); width: 100%;">Feed (10 Chips)</button>
             <audio id="cat-eat-sound" src="eat.mp3" preload="auto"></audio>
@@ -824,14 +785,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="script.js?v=7"></script>
-    <script src="blackjack.js?v=5"></script>
-    <script src="poker.js?v=5"></script>
-    <script src="roulette.js?v=5"></script>
-    <script src="slots.js?v=5"></script>
-    
-    <!-- Drink Transition Elements -->
-    <img id="transition-glass" src="wine_glass.svg" style="display: none; position: fixed; z-index: 9999; pointer-events: none;">
-    <div id="wine-splash" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #b91c1c; z-index: 9998; pointer-events: none;"></div>
+    <script src="script.js?v=8"></script>
+    <script src="blackjack.js?v=8"></script>
+    <script src="poker.js?v=8"></script>
+    <script src="roulette.js?v=8"></script>
+    <script src="slots.js?v=8"></script>
 </body>
 </html>
