@@ -1499,7 +1499,7 @@ h1 {
 }
 .layer-bg {
     background-size: cover;
-    background-position: center;
+    background-position: bottom center;
     z-index: 1;
     filter: brightness(0.7);
 }
@@ -1509,16 +1509,14 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: 25vh;
+    padding-bottom: 20vh; /* Align cat to sit on wooden counter */
 }
 .bartender-cat {
-    width: 300px;
-    height: 300px;
-    border-radius: 20px;
-    box-shadow: 0 0 50px rgba(251, 191, 36, 0.5);
-    border: 5px solid #fbbf24;
+    width: 250px;
+    height: auto;
     cursor: pointer;
     transition: transform 0.3s;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
 }
 .bartender-cat:hover {
     transform: scale(1.05);
