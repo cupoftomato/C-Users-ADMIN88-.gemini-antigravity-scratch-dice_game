@@ -180,6 +180,15 @@ function switchGame(game) {
     document.querySelectorAll('.game-view').forEach(view => view.classList.remove('active-view'));
     document.getElementById(`view-${game}`).classList.add('active-view');
     
+    const returnBarBtn = document.getElementById('nav-bar');
+    if (returnBarBtn) {
+        if (game === 'bar') {
+            returnBarBtn.style.display = 'none';
+        } else {
+            returnBarBtn.style.display = 'inline-block';
+        }
+    }
+    
     // Ensure persistent stats are visible when playing
     const persistentStats = document.getElementById('persistent-stats');
     if (persistentStats) {
