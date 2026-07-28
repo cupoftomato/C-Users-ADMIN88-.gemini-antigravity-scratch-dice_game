@@ -1,0 +1,7 @@
+node_modules
+.git
+*.exe
+poker_database.sqlite
+poker_database.sqlite-journal
+fly.toml
+.dockerignore

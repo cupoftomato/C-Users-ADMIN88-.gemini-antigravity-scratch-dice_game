@@ -64,7 +64,7 @@ function adminGiveChips() {
 function skipAuth() {
     document.getElementById('view-auth').classList.remove('active-view');
     document.getElementById('global-nav').style.display = 'flex';
-    switchGame('dice');
+    switchGame('bar');
     document.getElementById('auth-error').textContent = '';
 }
 
@@ -129,7 +129,7 @@ function loginUser() {
             // Advance to game
             document.getElementById('view-auth').classList.remove('active-view');
             document.getElementById('global-nav').style.display = 'flex';
-            switchGame('dice');
+            switchGame('bar');
         }
     })
     .catch(e => err.textContent = "Server offline.");

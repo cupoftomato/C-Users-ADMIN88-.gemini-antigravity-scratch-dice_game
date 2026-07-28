@@ -174,16 +174,28 @@ function updateGlobalStats() {
 
 function switchGame(game) {
     activeGame = game;
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`nav-${game}`).classList.add('active');
     
     document.querySelectorAll('.game-view').forEach(view => view.classList.remove('active-view'));
     document.getElementById(`view-${game}`).classList.add('active-view');
     
-    // Ensure persistent stats are visible when playing
+    // Hide global nav when in bar or auth, show it when in a game
+    const nav = document.getElementById('global-nav');
+    if (nav) {
+        if (game === 'bar' || game === 'auth') {
+            nav.style.display = 'none';
+        } else {
+            nav.style.display = 'flex';
+        }
+    }
+    
+    // Ensure persistent stats are visible when playing (or in bar)
     const persistentStats = document.getElementById('persistent-stats');
     if (persistentStats) {
-        persistentStats.style.display = 'flex';
+        if (game === 'auth') {
+            persistentStats.style.display = 'none';
+        } else {
+            persistentStats.style.display = 'flex';
+        }
     }
     
     if (game === 'dice') {
@@ -205,6 +217,52 @@ function switchGame(game) {
         if (typeof initSlotsGame === 'function') initSlotsGame();
     } else {
         moveBetLogWidget(null); // hide
+    }
+}
+
+function drinkAndSwitch(game) {
+    // Play sound if unlocked
+    const eatSound = document.getElementById('cat-eat-sound');
+    if (eatSound) {
+        eatSound.currentTime = 0;
+        eatSound.volume = window.sfxVolume || 0.8;
+        eatSound.play().catch(e => console.log('Sound error', e));
+    }
+    
+    const transGlass = document.getElementById('transition-glass');
+    if (transGlass) {
+        // Position glass initially
+        transGlass.style.display = 'block';
+        transGlass.classList.remove('drink-anim');
+        
+        // Start from center bottom
+        transGlass.style.bottom = '10vh';
+        transGlass.style.left = '50%';
+        transGlass.style.transform = 'translate(-50%, 0) scale(1)';
+        transGlass.style.opacity = '1';
+        
+        // Force reflow
+        void transGlass.offsetWidth;
+        
+        // Add animation class
+        transGlass.classList.add('drink-anim');
+        
+        // Wait for it to cover the screen, then switch game
+        setTimeout(() => {
+            switchGame(game);
+            
+            // Fade out the glass
+            setTimeout(() => {
+                transGlass.style.opacity = '0';
+                setTimeout(() => {
+                    transGlass.style.display = 'none';
+                    transGlass.classList.remove('drink-anim');
+                }, 500);
+            }, 500);
+            
+        }, 1200); // Wait 1.2s to cover screen
+    } else {
+        switchGame(game);
     }
 }
 
@@ -831,7 +889,7 @@ window.onload = () => {
         
         document.getElementById('view-auth').classList.remove('active-view');
         document.getElementById('global-nav').style.display = 'flex';
-        switchGame('dice');
+        switchGame('bar');
         
         if (currentUser.toLowerCase() === 'cupoftomato') {
             document.getElementById('nav-admin-btn').style.display = 'inline-block';
