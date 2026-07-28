@@ -1513,10 +1513,10 @@ h1 {
 
 .bottle-hotspot {
     position: absolute;
-    width: 70px;
-    height: 120px;
-    background: transparent;
-    border: none;
+    width: 60px;
+    height: 100px;
+    background: rgba(251, 191, 36, 0.05); /* Subtle default visibility */
+    border: 1px dashed rgba(251, 191, 36, 0.4); /* So user knows where to click */
     z-index: 10;
     cursor: pointer;
     border-radius: 10px;
