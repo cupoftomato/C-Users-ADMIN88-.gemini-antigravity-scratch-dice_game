@@ -26,7 +26,8 @@
     <nav class="top-nav" id="global-nav" style="display: none;">
         <div class="nav-brand">Casino Royale</div>
         <div class="nav-links">
-            <button class="nav-btn active" id="nav-dice" onclick="switchGame('dice')">Thrifty</button>
+            <button class="nav-btn active" id="nav-bar" onclick="switchGame('bar')">Bar</button>
+            <button class="nav-btn" id="nav-dice" onclick="switchGame('dice')">Thrifty</button>
             <button class="nav-btn" id="nav-blackjack" onclick="switchGame('blackjack')">Blackjack</button>
             <button class="nav-btn" id="nav-poker" onclick="switchGame('poker')">Texas Hold'em</button>
             <button class="nav-btn" id="nav-roulette" onclick="switchGame('roulette')">Roulette</button>
@@ -132,6 +133,47 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 2.5D BAR MENU VIEW -->
+        <div id="view-bar" class="game-view block-view">
+            <div class="bar-scene">
+                <!-- Banner: Hidden by default, unfolds on hover -->
+                <div id="bar-game-banner" class="game-banner">
+                    <h2 id="bar-banner-title">Select a Drink</h2>
+                </div>
+
+                <!-- Layer 1: Background Wine Cabinet -->
+                <img src="bar_bg.png?v=8" class="bar-layer layer-bg" alt="Wine Cabinet">
+                
+                <!-- Interactive Bottles Overlay -->
+                <!-- We will map 5 bottles. Guessing coordinates based on common shelf layouts -->
+                <div class="bottle-hotspot" style="bottom: 40%; left: 10%;" onclick="prepareDrink('dice')" onmouseover="showBanner('Thrifty (Dice)')" onmouseout="hideBanner()"></div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 30%;" onclick="prepareDrink('blackjack')" onmouseover="showBanner('Blackjack')" onmouseout="hideBanner()"></div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 50%;" onclick="prepareDrink('poker')" onmouseover="showBanner('Texas Hold\'em')" onmouseout="hideBanner()"></div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 70%;" onclick="prepareDrink('roulette')" onmouseover="showBanner('Roulette')" onmouseout="hideBanner()"></div>
+                <div class="bottle-hotspot" style="bottom: 40%; left: 90%;" onclick="prepareDrink('slots')" onmouseover="showBanner('Slots')" onmouseout="hideBanner()"></div>
+
+                <!-- Layer 2: Bartender Cat -->
+                <div class="bar-layer layer-mid">
+                    <div class="bartender-dialogue" id="bartender-speech">Whatcha wanna drink?</div>
+                    <img src="admin_nav.png" alt="Bankeeper" class="bartender-cat" onclick="openBank()">
+                </div>
+
+                <!-- Layer 3: Foreground Wooden Counter & Sliding Glass -->
+                <div class="bar-layer layer-front">
+                    <!-- The transparent wooden counter container -->
+                    <div class="bar-counter">
+                        <img src="wine_glass.svg" id="sliding-glass" class="sliding-glass" style="display: none;" alt="Drink">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fullscreen Drink Transition Overlay -->
+            <div id="drink-transition-overlay" style="display: none;">
+                <img src="wine_glass.svg" id="transition-glass" alt="Cheers">
+                <div id="wine-splash"></div>
             </div>
         </div>
 

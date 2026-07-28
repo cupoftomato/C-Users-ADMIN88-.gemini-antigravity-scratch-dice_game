@@ -1482,3 +1482,203 @@ h1 {
     color: #fbbf24;
     font-weight: bold;
 }
+
+/* 2.5D BAR UI REDESIGN */
+.block-view.active-view {
+    display: block !important;
+}
+
+.bar-scene {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #0f172a;
+}
+
+.bar-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.layer-bg {
+    object-fit: cover;
+    object-position: bottom center;
+    z-index: 1;
+    filter: brightness(0.6) saturate(1.2);
+}
+
+.bottle-hotspot {
+    position: absolute;
+    width: 60px;
+    height: 100px;
+    background: transparent;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.bottle-hotspot:hover {
+    background: rgba(251, 191, 36, 0.2);
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.8), inset 0 0 10px rgba(251, 191, 36, 0.5);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    transform: scale(1.05);
+}
+
+.game-banner {
+    position: absolute;
+    top: -100px; /* Hidden initially */
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(0,0,0,0.8));
+    border: 2px solid #fbbf24;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 20px 50px;
+    z-index: 20;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 30px rgba(251,191,36,0.3);
+    transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.game-banner h2 {
+    margin: 0;
+    color: #fbbf24;
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.layer-mid {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 20vh; /* Sit on wooden counter */
+    pointer-events: none; /* Let clicks pass through if needed, except on cat */
+}
+
+.bartender-cat {
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
+    pointer-events: auto;
+}
+
+.bartender-cat:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.bartender-dialogue {
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1e293b;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    pointer-events: auto;
+}
+
+.bartender-dialogue::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.9) transparent transparent transparent;
+}
+
+.layer-front {
+    z-index: 3;
+    pointer-events: none; /* Let clicks pass through to bottles */
+}
+
+.bar-counter {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15vh;
+    background: transparent;
+    display: flex;
+    align-items: flex-end;
+}
+
+.sliding-glass {
+    height: 120px;
+    margin-bottom: 3vh;
+    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.6));
+    animation: slideGlass 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes slideGlass {
+    0% {
+        transform: translateX(120vw) rotate(15deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(50vw) translateX(-50px) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+#drink-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#transition-glass {
+    height: 200px;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+    animation: drinkGlass 1.2s cubic-bezier(0.6, 0.05, 0.2, 1) forwards;
+}
+
+@keyframes drinkGlass {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(30) translateY(10vh);
+        opacity: 0;
+    }
+}
+
+#wine-splash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(185, 28, 28, 0.9) 0%, rgba(127, 29, 29, 0.95) 100%);
+    opacity: 0;
+    animation: splashFade 1.2s ease-in forwards;
+}
+
+@keyframes splashFade {
+    0% { opacity: 0; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}

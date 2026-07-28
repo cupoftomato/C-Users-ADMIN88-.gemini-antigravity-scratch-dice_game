@@ -831,7 +831,7 @@ window.onload = () => {
         
         document.getElementById('view-auth').classList.remove('active-view');
         document.getElementById('global-nav').style.display = 'flex';
-        switchGame('dice');
+        switchGame('bar');
         
         if (currentUser.toLowerCase() === 'cupoftomato') {
             document.getElementById('nav-admin-btn').style.display = 'inline-block';
@@ -1783,6 +1783,79 @@ function startPlayTimeTimer() {
         
         renderPlayTimeUI();
     }, 1000);
+}
+
+// --- 2.5D Bar UI Logic ---
+
+function showBanner(text) {
+    const banner = document.getElementById('bar-game-banner');
+    const title = document.getElementById('bar-banner-title');
+    if (banner && title) {
+        title.innerText = text;
+        banner.style.top = '0px';
+    }
+}
+
+function hideBanner() {
+    const banner = document.getElementById('bar-game-banner');
+    if (banner) {
+        banner.style.top = '-100px';
+    }
+}
+
+function prepareDrink(gameId) {
+    const glass = document.getElementById('sliding-glass');
+    const overlay = document.getElementById('drink-transition-overlay');
+    const tGlass = document.getElementById('transition-glass');
+    const splash = document.getElementById('wine-splash');
+    const speech = document.getElementById('bartender-speech');
+
+    if (!glass || !overlay || !tGlass || !splash || !speech) {
+        // Fallback if elements are missing
+        switchGame(gameId);
+        return;
+    }
+
+    // Play sound if available
+    if (window.dealSound) {
+        window.dealSound.currentTime = 0;
+        window.dealSound.play().catch(e => console.log('Audio play failed', e));
+    }
+
+    // Change bartender text temporarily
+    speech.innerText = 'Coming right up!';
+
+    // Reset animations
+    glass.style.display = 'block';
+    glass.style.animation = 'none';
+    void glass.offsetWidth; // trigger reflow
+    glass.style.animation = 'slideGlass 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+
+    // Wait for slide to finish
+    setTimeout(() => {
+        glass.style.display = 'none';
+        speech.innerText = 'Whatcha wanna drink?';
+
+        // Start fullscreen drink transition
+        overlay.style.display = 'flex';
+        tGlass.style.animation = 'none';
+        splash.style.animation = 'none';
+        void tGlass.offsetWidth;
+        
+        tGlass.style.animation = 'drinkGlass 1.2s cubic-bezier(0.6, 0.05, 0.2, 1) forwards';
+        splash.style.animation = 'splashFade 1.2s ease-in forwards';
+
+        // Wait for screen to go fully red/black, then switch game
+        setTimeout(() => {
+            switchGame(gameId);
+            
+            // Wait a bit more before hiding overlay so the new game fades in
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }, 1100); // 1.1s is right before the end of the 1.2s animation
+
+    }, 1200);
 }
 
 function renderPlayTimeUI() {
