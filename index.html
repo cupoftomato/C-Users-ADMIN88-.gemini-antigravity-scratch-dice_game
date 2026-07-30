@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Royale</title>
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=99">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -23,13 +23,79 @@
     </div>
     <audio id="hakari-audio" src="hakari.mp3" preload="auto" loop></audio>
     
-    <nav class="top-nav" id="global-nav" style="display: none;">
-        <div class="nav-brand">Casino Royale</div>
-        <div class="nav-links">
-            <button class="nav-btn active" id="nav-bar" onclick="switchGame('bar')">🍹 Return to Bar</button>
-            <button class="nav-btn" id="nav-ad-btn" style="color: #4ade80; border: 1px solid #4ade80;" onclick="openScratchCard()">Scratch Card</button>
-            <button class="nav-btn" id="nav-admin-btn" style="color: #fbbf24; border: 1px solid #fbbf24; display: none;" onclick="openAdminModal()">Admin</button>
-            <button class="nav-btn" id="nav-settings-btn" style="color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15);" onclick="toggleSettingsModal()">⚙️ Settings</button>
+    <nav class="wine-cabinet" id="global-nav" style="display: none;">
+        <div class="shelf-container">
+            <!-- Brand Sign -->
+            <div class="cabinet-brand">CASINO<br>ROYALE</div>
+            
+            <!-- Decor 1 -->
+            <div class="bottle decor type1"></div>
+            
+            <!-- Thrifty Bottle -->
+            <div class="bottle game-bottle thrifty-bottle active" id="nav-dice" onclick="switchGame('dice')">
+                <div class="bottle-neck"></div>
+                <div class="bottle-body">
+                    <div class="liquid green"></div>
+                    <div class="bottle-label"><span>Thrifty</span></div>
+                </div>
+            </div>
+
+            <!-- Blackjack Bottle -->
+            <div class="bottle game-bottle blackjack-bottle" id="nav-blackjack" onclick="switchGame('blackjack')">
+                <div class="bottle-neck"></div>
+                <div class="bottle-body">
+                    <div class="liquid red"></div>
+                    <div class="bottle-label"><span>Blackjack</span></div>
+                </div>
+            </div>
+
+            <!-- Decor 2 -->
+            <div class="bottle decor type2"></div>
+
+            <!-- Poker Bottle -->
+            <div class="bottle game-bottle poker-bottle" id="nav-poker" onclick="switchGame('poker')">
+                <div class="bottle-neck"></div>
+                <div class="bottle-body">
+                    <div class="liquid amber"></div>
+                    <div class="bottle-label"><span>Hold'em</span></div>
+                </div>
+            </div>
+
+            <!-- Roulette Bottle -->
+            <div class="bottle game-bottle roulette-bottle" id="nav-roulette" onclick="switchGame('roulette')">
+                <div class="bottle-neck"></div>
+                <div class="bottle-body">
+                    <div class="liquid dark-red"></div>
+                    <div class="bottle-label"><span>Roulette</span></div>
+                </div>
+            </div>
+
+            <!-- Decor 3 -->
+            <div class="bottle decor type3"></div>
+
+            <!-- Slots Bottle -->
+            <div class="bottle game-bottle slots-bottle" id="nav-slots" onclick="switchGame('slots')">
+                <div class="bottle-neck"></div>
+                <div class="bottle-body">
+                    <div class="liquid neon-blue"></div>
+                    <div class="bottle-label"><span>Slots</span></div>
+                </div>
+            </div>
+            
+            <!-- Utilities (Small Glasses/Flasks) -->
+            <div class="utilities-group">
+                <div class="bottle utility scratch-bottle" id="nav-ad-btn" onclick="openScratchCard()" title="Scratch Card">
+                    <div class="bottle-label"><span>???</span></div>
+                </div>
+                
+                <div class="bottle utility admin-bottle" id="nav-admin-btn" style="display: none;" onclick="openAdminModal()" title="Admin">
+                    <div class="bottle-label"><span>??</span></div>
+                </div>
+
+                <div class="bottle utility settings-bottle" id="nav-settings-btn" onclick="toggleSettingsModal()" title="Settings">
+                    <div class="bottle-label"><span>??</span></div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -53,7 +119,7 @@
                 <h4 style="margin: 0; color: #fbbf24; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px;">Audio Options</h4>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: bold; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">🎵 Music Volume</span>
+                        <span style="font-weight: bold; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">?? Music Volume</span>
                         <span id="music-vol-val" style="color: #fbbf24; font-weight: bold;">30%</span>
                     </div>
                     <input type="range" id="music-volume-slider" min="0" max="100" value="30" class="custom-slider" style="width: 100%; cursor: pointer;" oninput="updateMusicVolume(this.value)">
@@ -61,7 +127,7 @@
                 
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: bold; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">🔊 Sound Effects</span>
+                        <span style="font-weight: bold; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">?? Sound Effects</span>
                         <span id="sfx-vol-val" style="color: #fbbf24; font-weight: bold;">80%</span>
                     </div>
                     <input type="range" id="sfx-volume-slider" min="0" max="100" value="80" class="custom-slider" style="width: 100%; cursor: pointer;" oninput="updateSFXVolume(this.value)">
@@ -106,12 +172,12 @@
         
         <!-- INITIAL AUTH VIEW -->
         <div id="view-auth" class="game-view active-view">
-            <div class="game-container">
-                <h1>Welcome to Casino Royale</h1>
-                <p class="subtitle">Log in or create an account to start playing and save your chips!</p>
-                <p id="auth-error" style="color: #f87171; font-weight: bold; margin-bottom: 15px;"></p>
+            <div class="game-container" style="background: transparent; box-shadow: none; border: none; backdrop-filter: none;">
+                <h1 style="text-shadow: 0 5px 15px rgba(0,0,0,0.8); font-size: 3.5rem;">Casino Royale</h1>
+                <p class="subtitle" style="text-shadow: 0 2px 5px rgba(0,0,0,0.8); font-size: 1.3rem; color: #cbd5e1;">Select a bottle below to play, or log in to save your chips!</p>
+                <p id="auth-error" style="color: #f87171; font-weight: bold; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);"></p>
                 
-                <div class="bet-section" style="max-width: 400px; margin: 0 auto;">
+                <div class="bet-section" style="max-width: 400px; margin: 0 auto; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                     <div class="bet-controls">
                         <label style="color: white; font-size: 1.1rem; margin-bottom: 5px;">Username:</label>
                         <input type="text" id="auth-username" class="bet-input" style="margin-bottom: 15px;" placeholder="Unique Name">
@@ -123,56 +189,53 @@
                             <button class="bet-btn play-btn" onclick="loginUser()">Login</button>
                             <button class="bet-btn xyric-btn" onclick="registerUser()">Register</button>
                         </div>
-                        <div style="margin-top: 15px; text-align: center;">
-                            <a href="#" onclick="skipAuth()" style="color: #fbbf24; text-decoration: underline; font-size: 0.9rem;">Skip (Play offline locally)</a>
-                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- 2.5D BAR MENU VIEW -->
-        <div id="view-bar" class="game-view block-view">
-            <div class="bar-scene">
-                <!-- Layer 1: Background Wine Cabinet -->
-                <img src="bar_bg_indie.png?v=1" class="bar-layer layer-bg" alt="Beer Cabinet">
-                
-                <!-- Interactive Bottles Overlay -->
-                <!-- We will map 5 hotspots to cover regions on the background image's shelf -->
-                <div class="bottle-hotspot" style="bottom: 42%; left: 12%;" onclick="prepareDrink('dice')" onmouseover="showBanner('Thrifty (Dice)')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 42%; left: 32%;" onclick="prepareDrink('blackjack')" onmouseover="showBanner('Blackjack')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 42%; left: 52%;" onclick="prepareDrink('poker')" onmouseover="showBanner('Texas Hold\'em')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 42%; left: 72%;" onclick="prepareDrink('roulette')" onmouseover="showBanner('Roulette')" onmouseout="hideBanner()"></div>
-                <div class="bottle-hotspot" style="bottom: 42%; left: 92%;" onclick="prepareDrink('slots')" onmouseover="showBanner('Slots')" onmouseout="hideBanner()"></div>
-
-                <!-- Layer 2: Bartender Cat -->
-                <div class="bar-layer layer-mid">
-                    <!-- Banner: Hidden by default, unfolds on hover -->
-                    <div id="bar-game-banner" class="game-banner">
-                        <h2 id="bar-banner-title">Select a Drink</h2>
-                    </div>
-
-                    <div class="bartender-dialogue" id="bartender-speech">Whatcha wanna drink?</div>
-                    <div class="bartender-frame">
-                        <img src="cat2.png" alt="Bartender" class="bartender-cat" onclick="openBank()">
-                    </div>
-                </div>
-
-                <!-- Layer 3: Foreground Wooden Counter & Sliding Glass -->
-                <div class="bar-layer layer-front">
-                    <!-- The transparent wooden counter container -->
-                    <div class="bar-counter">
-                        <img src="wine_glass.svg" id="sliding-glass" class="sliding-glass" style="display: none;" alt="Drink">
-                    </div>
-                </div>
-                
-                <!-- Layer 4: This is handled globally (nav, stats, music) via z-index -->
             </div>
             
-            <!-- Fullscreen Drink Transition Overlay -->
-            <div id="drink-transition-overlay" style="display: none;">
-                <img src="wine_glass.svg" id="transition-glass" alt="Cheers">
-                <div id="wine-splash"></div>
+            <!-- Lobby Wine Cabinet (Behind Cat) -->
+            <div id="lobby-wine-cabinet" style="position: fixed; bottom: 10px; left: 0; z-index: 395; display: flex; align-items: flex-end; gap: 25px; padding: 20px 40px 20px 20px; background: linear-gradient(to right, rgba(30, 15, 10, 0.9), rgba(15, 23, 42, 0.8)); backdrop-filter: blur(15px); border-radius: 0 30px 30px 0; border: 4px solid #4a3018; border-left: none; box-shadow: 10px 10px 40px rgba(0,0,0,0.8), inset 0 2px 10px rgba(255,255,255,0.1);">
+                <div style="width: 130px;"></div> <!-- Spacer for the Cat -->
+                
+                <div class="bottle game-bottle thrifty-bottle" onclick="selectLobbyGame('dice')" title="Play Thrifty">
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-body" style="border: 2px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.5), inset 0 0 10px rgba(251,191,36,0.3);">
+                        <div class="liquid green"></div>
+                        <div class="bottle-label"><span>Thrifty</span></div>
+                    </div>
+                </div>
+
+                <div class="bottle game-bottle blackjack-bottle" onclick="selectLobbyGame('blackjack')" title="Play Blackjack">
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-body" style="border: 2px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.5), inset 0 0 10px rgba(251,191,36,0.3);">
+                        <div class="liquid red"></div>
+                        <div class="bottle-label"><span>Blackjack</span></div>
+                    </div>
+                </div>
+
+                <div class="bottle game-bottle poker-bottle" onclick="selectLobbyGame('poker')" title="Play Texas Hold'em">
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-body" style="border: 2px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.5), inset 0 0 10px rgba(251,191,36,0.3);">
+                        <div class="liquid amber"></div>
+                        <div class="bottle-label"><span>Hold'em</span></div>
+                    </div>
+                </div>
+
+                <div class="bottle game-bottle roulette-bottle" onclick="selectLobbyGame('roulette')" title="Play Roulette">
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-body" style="border: 2px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.5), inset 0 0 10px rgba(251,191,36,0.3);">
+                        <div class="liquid dark-red"></div>
+                        <div class="bottle-label"><span>Roulette</span></div>
+                    </div>
+                </div>
+
+                <div class="bottle game-bottle slots-bottle" onclick="selectLobbyGame('slots')" title="Play Slots">
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-body" style="border: 2px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.5), inset 0 0 10px rgba(251,191,36,0.3);">
+                        <div class="liquid neon-blue"></div>
+                        <div class="bottle-label"><span>Slots</span></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -221,7 +284,7 @@
                 <div class="result" id="result-dice"></div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="bet-btn play-btn" style="display: none;" onclick="skipThriftyReveal()" id="skip-reveal-btn">⏩ Skip Reveal</button>
+                    <button class="bet-btn play-btn" style="display: none;" onclick="skipThriftyReveal()" id="skip-reveal-btn">? Skip Reveal</button>
                 </div>
             </div>
             
@@ -245,7 +308,7 @@
                     <div class="table-area" id="table-blackjack" style="opacity: 0.5; pointer-events: none;">
                         <div class="casino-table">
                             <div class="dealer-bot" id="bot-bj">
-                                <div class="dealer-icon">🤖</div>
+                                <div class="dealer-icon">??</div>
                                 <div class="dealer-text">Dealer</div>
                             </div>
                             <div class="visual-deck" id="deck-blackjack">
@@ -309,12 +372,12 @@
                         <p class="subtitle" id="welcome-subtitle">Play offline or join the server.</p>
                         <div class="bet-section" style="display: flex; gap: 20px; justify-content: center;">
                             <div class="mode-card" style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; cursor: pointer; text-align: center;" onclick="showLobbyView('offline-lobby-view')">
-                                <div style="font-size: 3rem; margin-bottom: 10px;">🤖</div>
+                                <div style="font-size: 3rem; margin-bottom: 10px;">??</div>
                                 <h2 style="color: white; margin: 0;">Offline vs Bots</h2>
                                 <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 10px;">Practice against AI locally.</p>
                             </div>
                             <div class="mode-card" style="background: rgba(59, 130, 246, 0.2); padding: 30px; border-radius: 12px; cursor: pointer; text-align: center; border: 2px solid #3b82f6;" onclick="showLobbyView('multiplayer-select-view')">
-                                <div style="font-size: 3rem; margin-bottom: 10px;">🌐</div>
+                                <div style="font-size: 3rem; margin-bottom: 10px;">??</div>
                                 <h2 style="color: #fbbf24; margin: 0;">Multiplayer</h2>
                                 <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 10px;">Play with real people.</p>
                             </div>
@@ -324,7 +387,7 @@
 
                     <!-- 3. MULTIPLAYER SELECT VIEW -->
                     <div id="multiplayer-select-view" style="display: none;">
-                        <button class="nav-btn" onclick="showLobbyView('mode-select-view')" style="margin-bottom: 20px;">⬅ Back</button>
+                        <button class="nav-btn" onclick="showLobbyView('mode-select-view')" style="margin-bottom: 20px;">? Back</button>
                         <h1>Multiplayer Lobby</h1>
                         <p class="subtitle">Host or join a room.</p>
                         <p id="multiplayer-error" style="color: #f87171; font-weight: bold; margin-bottom: 15px;"></p>
@@ -370,7 +433,7 @@
 
                     <!-- 4. WAITING ROOM VIEW -->
                     <div id="waiting-room-view" style="display: none; text-align: center;">
-                        <button class="nav-btn" onclick="leaveWaitingRoom()" style="margin-bottom: 20px; display: block;">⬅ Leave Room</button>
+                        <button class="nav-btn" onclick="leaveWaitingRoom()" style="margin-bottom: 20px; display: block;">? Leave Room</button>
                         <h1>Waiting Room</h1>
                         <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; margin: 20px auto; max-width: 300px; border: 1px dashed #fbbf24;">
                             <p style="color: #94a3b8; margin: 0;">Room Code</p>
@@ -385,7 +448,7 @@
 
                     <!-- 5. OFFLINE LOBBY VIEW (Original) -->
                     <div id="offline-lobby-view" style="display: none;">
-                        <button class="nav-btn" onclick="showLobbyView('mode-select-view')" style="margin-bottom: 20px;">⬅ Back</button>
+                        <button class="nav-btn" onclick="showLobbyView('mode-select-view')" style="margin-bottom: 20px;">? Back</button>
                         <h1>Texas Hold'em vs Bots</h1>
                         <p class="subtitle">Set up your local room!</p>
                         <p id="lobby-error" style="color: #f87171; font-weight: bold; margin-bottom: 15px;"></p>
@@ -410,7 +473,7 @@
                     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                         <div style="flex: 3; min-width: 500px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <button class="nav-btn" onclick="leavePokerRoom()">⬅ Leave Table (Cash Out)</button>
+                                <button class="nav-btn" onclick="leavePokerRoom()">? Leave Table (Cash Out)</button>
                                 <span style="color: #fbbf24; font-weight: bold; font-size: 1.2rem;">Your Stack: <span id="player-stack">0</span></span>
                             </div>
 
@@ -465,55 +528,55 @@
                         <li>
                             <div style="margin-bottom: 5px;">1. Straight Flush</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed">9♠</div><div class="mini-card revealed">8♠</div><div class="mini-card revealed">7♠</div><div class="mini-card revealed">6♠</div><div class="mini-card revealed">5♠</div>
+                                <div class="mini-card revealed">9?</div><div class="mini-card revealed">8?</div><div class="mini-card revealed">7?</div><div class="mini-card revealed">6?</div><div class="mini-card revealed">5?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">2. Four of a Kind</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed red">A♥</div><div class="mini-card revealed red">A♦</div><div class="mini-card revealed">A♣</div><div class="mini-card revealed">A♠</div><div class="mini-card revealed red">K♥</div>
+                                <div class="mini-card revealed red">A?</div><div class="mini-card revealed red">A?</div><div class="mini-card revealed">A?</div><div class="mini-card revealed">A?</div><div class="mini-card revealed red">K?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">3. Full House</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed">K♠</div><div class="mini-card revealed red">K♥</div><div class="mini-card revealed red">K♦</div><div class="mini-card revealed">Q♣</div><div class="mini-card revealed red">Q♥</div>
+                                <div class="mini-card revealed">K?</div><div class="mini-card revealed red">K?</div><div class="mini-card revealed red">K?</div><div class="mini-card revealed">Q?</div><div class="mini-card revealed red">Q?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">4. Flush</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed red">A♥</div><div class="mini-card revealed red">J♥</div><div class="mini-card revealed red">8♥</div><div class="mini-card revealed red">5♥</div><div class="mini-card revealed red">2♥</div>
+                                <div class="mini-card revealed red">A?</div><div class="mini-card revealed red">J?</div><div class="mini-card revealed red">8?</div><div class="mini-card revealed red">5?</div><div class="mini-card revealed red">2?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">5. Straight</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed">9♣</div><div class="mini-card revealed red">8♦</div><div class="mini-card revealed red">7♥</div><div class="mini-card revealed">6♠</div><div class="mini-card revealed">5♣</div>
+                                <div class="mini-card revealed">9?</div><div class="mini-card revealed red">8?</div><div class="mini-card revealed red">7?</div><div class="mini-card revealed">6?</div><div class="mini-card revealed">5?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">6. Three of a Kind</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed">7♠</div><div class="mini-card revealed red">7♥</div><div class="mini-card revealed red">7♦</div><div class="mini-card revealed">A♣</div><div class="mini-card revealed red">Q♥</div>
+                                <div class="mini-card revealed">7?</div><div class="mini-card revealed red">7?</div><div class="mini-card revealed red">7?</div><div class="mini-card revealed">A?</div><div class="mini-card revealed red">Q?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">7. Two Pair</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed">J♠</div><div class="mini-card revealed red">J♥</div><div class="mini-card revealed red">9♦</div><div class="mini-card revealed">9♣</div><div class="mini-card revealed">4♠</div>
+                                <div class="mini-card revealed">J?</div><div class="mini-card revealed red">J?</div><div class="mini-card revealed red">9?</div><div class="mini-card revealed">9?</div><div class="mini-card revealed">4?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">8. Pair</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed red">2♥</div><div class="mini-card revealed">2♠</div><div class="mini-card revealed red">K♦</div><div class="mini-card revealed">Q♣</div><div class="mini-card revealed red">7♥</div>
+                                <div class="mini-card revealed red">2?</div><div class="mini-card revealed">2?</div><div class="mini-card revealed red">K?</div><div class="mini-card revealed">Q?</div><div class="mini-card revealed red">7?</div>
                             </div>
                         </li>
                         <li>
                             <div style="margin-bottom: 5px;">9. High Card</div>
                             <div style="display: flex; gap: 3px;">
-                                <div class="mini-card revealed">A♠</div><div class="mini-card revealed red">J♥</div><div class="mini-card revealed red">8♦</div><div class="mini-card revealed">5♣</div><div class="mini-card revealed red">2♥</div>
+                                <div class="mini-card revealed">A?</div><div class="mini-card revealed red">J?</div><div class="mini-card revealed red">8?</div><div class="mini-card revealed">5?</div><div class="mini-card revealed red">2?</div>
                             </div>
                         </li>
                     </ul>
@@ -550,9 +613,9 @@
                 <div style="flex: 2; min-width: 300px;">
                     <h3 style="color: #fbbf24; margin-top: 0; text-align: center; text-transform: uppercase;">Place Your Bet</h3>
                     <div class="roulette-board" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
-                        <button class="action-btn" id="bet-roulette-red" onclick="selectRouletteBet('red')" style="background: #ef4444; border: 2px solid #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.2); font-weight: bold; border-radius: 8px; padding: 8px; font-size: 0.9rem;">🔴 Red (1:1)</button>
-                        <button class="action-btn" id="bet-roulette-black" onclick="selectRouletteBet('black')" style="background: #1e293b; border: 2px solid #334155; font-weight: bold; border-radius: 8px; padding: 8px; font-size: 0.9rem;">⚫ Black (1:1)</button>
-                        <button class="action-btn" id="bet-roulette-green" onclick="selectRouletteBet('green')" style="background: #10b981; border: 2px solid #10b981; font-weight: bold; border-radius: 8px; padding: 8px; font-size: 0.9rem;">🟢 Zero (35:1)</button>
+                        <button class="action-btn" id="bet-roulette-red" onclick="selectRouletteBet('red')" style="background: #ef4444; border: 2px solid #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.2); font-weight: bold; border-radius: 8px; padding: 8px; font-size: 0.9rem;">?? Red (1:1)</button>
+                        <button class="action-btn" id="bet-roulette-black" onclick="selectRouletteBet('black')" style="background: #1e293b; border: 2px solid #334155; font-weight: bold; border-radius: 8px; padding: 8px; font-size: 0.9rem;">? Black (1:1)</button>
+                        <button class="action-btn" id="bet-roulette-green" onclick="selectRouletteBet('green')" style="background: #10b981; border: 2px solid #10b981; font-weight: bold; border-radius: 8px; padding: 8px; font-size: 0.9rem;">?? Zero (35:1)</button>
                         
                         <button class="action-btn stand-btn" id="bet-roulette-even" onclick="selectRouletteBet('even')" style="padding: 8px; border-radius: 8px; font-size: 0.9rem;">Even (1:1)</button>
                         <button class="action-btn stand-btn" id="bet-roulette-odd" onclick="selectRouletteBet('odd')" style="padding: 8px; border-radius: 8px; font-size: 0.9rem;">Odd (1:1)</button>
@@ -594,9 +657,9 @@
                     <div class="slots-machine" style="display: flex; align-items: center; gap: 35px; background: linear-gradient(135deg, #1e1b4b, #311042); border: 5px solid #c084fc; border-radius: 28px; padding: 40px; box-shadow: 0 0 45px rgba(192, 132, 252, 0.5), inset 0 0 25px rgba(0,0,0,0.8); margin: 20px auto 25px auto; width: 100%; box-sizing: border-box;">
                         <!-- Slots Reels Window -->
                         <div class="slots-window" style="flex: 1; display: flex; justify-content: center; gap: 20px; background: rgba(0, 0, 0, 0.6); padding: 20px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.05); overflow: hidden; height: 160px; align-items: center;">
-                            <div class="slot-reel" id="reel-1" style="width: 100px; height: 130px; font-size: 5rem; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; transition: transform 0.1s ease; border: 1px solid rgba(255,255,255,0.1);">💎</div>
-                            <div class="slot-reel" id="reel-2" style="width: 100px; height: 130px; font-size: 5rem; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; transition: transform 0.1s ease; border: 1px solid rgba(255,255,255,0.1);">💎</div>
-                            <div class="slot-reel" id="reel-3" style="width: 100px; height: 130px; font-size: 5rem; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; transition: transform 0.1s ease; border: 1px solid rgba(255,255,255,0.1);">💎</div>
+                            <div class="slot-reel" id="reel-1" style="width: 100px; height: 130px; font-size: 5rem; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; transition: transform 0.1s ease; border: 1px solid rgba(255,255,255,0.1);">??</div>
+                            <div class="slot-reel" id="reel-2" style="width: 100px; height: 130px; font-size: 5rem; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; transition: transform 0.1s ease; border: 1px solid rgba(255,255,255,0.1);">??</div>
+                            <div class="slot-reel" id="reel-3" style="width: 100px; height: 130px; font-size: 5rem; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 16px; transition: transform 0.1s ease; border: 1px solid rgba(255,255,255,0.1);">??</div>
                         </div>
                         
                         <!-- Drag-to-spin Lever (Pivoting mechanical lever) -->
@@ -628,13 +691,13 @@
                 <div style="flex: 1.2; min-width: 300px; max-width: 350px; background: rgba(30, 41, 59, 0.5); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); text-align: left; box-sizing: border-box; align-self: flex-start; margin-top: 70px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
                     <h3 style="color: #c084fc; margin-top: 0; text-align: center; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 15px;">Payout Table</h3>
                     <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px; font-size: 1rem; color: #cbd5e1;">
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>🍅 🍅 🍅 (Tomato Jackpot) <span style="font-size: 0.8rem; color: #94a3b8;">(0.005%)</span></span> <span style="color: #fbbf24; font-weight: bold;">1360x</span></li>
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>🔥 <span class="neon-seven" style="font-size: 1.1rem; text-shadow: 0 0 5px #fff, 0 0 10px #f59e0b, 0 0 15px #ef4444; animation: none;">7 7 7</span> (Super Jackpot) <span style="font-size: 0.8rem; color: #94a3b8;">(0.011%)</span></span> <span style="color: #fbbf24; font-weight: bold;">777x</span></li>
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>💎 💎 💎 (Diamond) <span style="font-size: 0.8rem; color: #94a3b8;">(0.044%)</span></span> <span style="color: #fbbf24; font-weight: bold;">100x</span></li>
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>👑 👑 👑 (Crown) <span style="font-size: 0.8rem; color: #94a3b8;">(0.153%)</span></span> <span style="color: #fbbf24; font-weight: bold;">50x</span></li>
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>🍀 🍀 🍀 (Clover) <span style="font-size: 0.8rem; color: #94a3b8;">(0.153%)</span></span> <span style="color: #fbbf24; font-weight: bold;">20x</span></li>
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>🔔 🔔 🔔 (Bell) <span style="font-size: 0.8rem; color: #94a3b8;">(0.153%)</span></span> <span style="color: #fbbf24; font-weight: bold;">20x</span></li>
-                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>🍒/🍋/🍇 Trio <span style="font-size: 0.8rem; color: #94a3b8;">(0.153% each)</span></span> <span style="color: #fbbf24; font-weight: bold;">10x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>?? ?? ?? (Tomato Jackpot) <span style="font-size: 0.8rem; color: #94a3b8;">(0.005%)</span></span> <span style="color: #fbbf24; font-weight: bold;">1360x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>?? <span class="neon-seven" style="font-size: 1.1rem; text-shadow: 0 0 5px #fff, 0 0 10px #f59e0b, 0 0 15px #ef4444; animation: none;">7 7 7</span> (Super Jackpot) <span style="font-size: 0.8rem; color: #94a3b8;">(0.011%)</span></span> <span style="color: #fbbf24; font-weight: bold;">777x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>?? ?? ?? (Diamond) <span style="font-size: 0.8rem; color: #94a3b8;">(0.044%)</span></span> <span style="color: #fbbf24; font-weight: bold;">100x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>?? ?? ?? (Crown) <span style="font-size: 0.8rem; color: #94a3b8;">(0.153%)</span></span> <span style="color: #fbbf24; font-weight: bold;">50x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>?? ?? ?? (Clover) <span style="font-size: 0.8rem; color: #94a3b8;">(0.153%)</span></span> <span style="color: #fbbf24; font-weight: bold;">20x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>?? ?? ?? (Bell) <span style="font-size: 0.8rem; color: #94a3b8;">(0.153%)</span></span> <span style="color: #fbbf24; font-weight: bold;">20x</span></li>
+                        <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>??/??/?? Trio <span style="font-size: 0.8rem; color: #94a3b8;">(0.153% each)</span></span> <span style="color: #fbbf24; font-weight: bold;">10x</span></li>
                         <li style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 6px;"><span>Any 2 Matching</span> <span style="color: #fbbf24; font-weight: bold;">2x</span></li>
                     </ul>
                 </div>
@@ -644,7 +707,7 @@
         <!-- GLOBAL ADMIN VIEW -->
     <div id="view-admin" class="game-view" style="display: none;">
         <div class="game-container">
-            <button class="nav-btn" onclick="showLobbyView('mode-select-view')" style="margin-bottom: 20px;">⬅ Back</button>
+            <button class="nav-btn" onclick="showLobbyView('mode-select-view')" style="margin-bottom: 20px;">? Back</button>
             <h1>Admin Panel</h1>
             <p class="subtitle">Give chips to players</p>
             <p id="admin-message" style="color: #4ade80; font-weight: bold; margin-bottom: 15px;"></p>
@@ -699,10 +762,10 @@
                     <div class="track-name" id="current-track-name">Lofi Cat Cafe</div>
                 </div>
                 <div class="music-controls">
-                    <button class="music-ctrl-btn play-pause-btn" id="music-play-btn" onclick="toggleYoutubePlayPause(event)">▶</button>
+                    <button class="music-ctrl-btn play-pause-btn" id="music-play-btn" onclick="toggleYoutubePlayPause(event)">?</button>
                 </div>
                 <div class="volume-control">
-                    <span>🔊</span>
+                    <span>??</span>
                     <input type="range" id="music-volume" class="custom-slider" min="0" max="100" value="30" oninput="changeYoutubeVolume(this.value, event)" onclick="event.stopPropagation()">
                 </div>
                 <div class="track-list" style="padding: 10px; cursor: default;">
@@ -728,7 +791,7 @@
 
             <!-- Player Management View -->
             <div id="admin-pm-view" style="display: none; flex-direction: column; gap: 15px; align-items: center; max-height: 60vh; overflow-y: auto; width: 100%;">
-                <button class="nav-btn" style="align-self: flex-start; margin-bottom: 5px;" onclick="showAdminSubView('main')">⬅ Back</button>
+                <button class="nav-btn" style="align-self: flex-start; margin-bottom: 5px;" onclick="showAdminSubView('main')">? Back</button>
                 
                 <!-- Self Settings -->
                 <div style="width: 100%; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 15px; display: flex; flex-direction: column; align-items: center;">
@@ -755,7 +818,7 @@
 
             <!-- Advance View -->
             <div id="admin-advance-view" style="display: none; flex-direction: column; gap: 15px; align-items: center; width: 100%;">
-                <button class="nav-btn" style="align-self: flex-start; margin-bottom: 5px;" onclick="showAdminSubView('main')">⬅ Back</button>
+                <button class="nav-btn" style="align-self: flex-start; margin-bottom: 5px;" onclick="showAdminSubView('main')">? Back</button>
                 
                 <button class="bet-btn play-btn" style="width: 100%; max-width: none; background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 5px 15px -3px rgba(245, 158, 11, 0.4);" onclick="toggleThriftyReveal()">Toggle Thrifty Reveal</button>
                 <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">Status: <span id="thrifty-reveal-status" style="color: #ef4444; font-weight: bold;">OFF</span> (Auto-disables next round)</div>
@@ -787,8 +850,8 @@
     <!-- GLOBAL CHAT WIDGET (FLOATING & DRAGGABLE) -->
     <div id="global-chat-widget" style="display: none; position: fixed; bottom: 80px; right: 30px; z-index: 1000; width: 330px; height: 420px; flex-direction: column; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.15); overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.7);">
         <div id="chat-drag-header" style="background: rgba(0,0,0,0.5); padding: 12px; cursor: move; font-weight: bold; color: #fbbf24; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); user-select: none;">
-            <span>💬 Global Chat</span>
-            <button onclick="toggleChatWindow()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; line-height: 1;">❌</button>
+            <span>?? Global Chat</span>
+            <button onclick="toggleChatWindow()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; line-height: 1;">?</button>
         </div>
         <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
             <!-- messages go here -->
@@ -801,13 +864,13 @@
 
     <!-- CHAT TOGGLE BUBBLE -->
     <div id="chat-toggle-bubble" onclick="toggleChatWindow()" style="position: fixed; bottom: 10px; right: 10px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: 2px solid #fbbf24; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; cursor: pointer; z-index: 9999; box-shadow: 0 0 15px #fbbf24, 0 5px 15px rgba(0,0,0,0.5); transition: transform 0.2s, box-shadow 0.2s; user-select: none;">
-        💬
+        ??
         <div id="chat-unread-dot" style="display: none; position: absolute; top: 1px; right: 1px; width: 13px; height: 13px; background-color: #ef4444; border-radius: 50%; border: 2px solid #fbbf24; box-shadow: 0 0 8px #ef4444;"></div>
     </div>
 
     <!-- GLOBAL BET LOG WIDGET -->
     <div id="global-bet-log-widget" style="display: none; flex: 1; min-width: 300px; flex-direction: column; background: rgba(15, 23, 42, 0.9); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; max-height: 500px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
-        <div style="background: rgba(0,0,0,0.5); padding: 10px; text-align: center; font-weight: bold; color: #fbbf24; border-bottom: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px;">🤖 Bet Log (<span id="bet-log-channel-name">Global</span>)</div>
+        <div style="background: rgba(0,0,0,0.5); padding: 10px; text-align: center; font-weight: bold; color: #fbbf24; border-bottom: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px;">?? Bet Log (<span id="bet-log-channel-name">Global</span>)</div>
         <div id="bet-log-messages" style="flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; font-family: monospace; font-size: 0.9rem; color: #cbd5e1;">
             <!-- bet logs go here -->
         </div>
@@ -826,10 +889,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="script.js?v=6"></script>
-    <script src="blackjack.js?v=8"></script>
-    <script src="poker.js?v=8"></script>
-    <script src="roulette.js?v=8"></script>
-    <script src="slots.js?v=8"></script>
+    <script src="script.js?v=99"></script>
+    <script src="blackjack.js?v=5"></script>
+    <script src="poker.js?v=5"></script>
+    <script src="roulette.js?v=5"></script>
+    <script src="slots.js?v=5"></script>
 </body>
 </html>

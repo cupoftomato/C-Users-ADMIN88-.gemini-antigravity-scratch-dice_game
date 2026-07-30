@@ -42,7 +42,7 @@ function spawnMusicNote() {
     
     const note = document.createElement('div');
     note.className = 'music-note';
-    const notes = ['🎵', '🎶', '𝄞', '♪', '♫'];
+    const notes = ['??', '??', '??', '?', '?'];
     note.textContent = notes[Math.floor(Math.random() * notes.length)];
     
     // Spawn left or right side (avoid middle)
@@ -173,21 +173,14 @@ function updateGlobalStats() {
 }
 
 function switchGame(game) {
+    document.querySelectorAll('.game-bottle').forEach(btn => btn.classList.remove('active'));
+    if (document.getElementById(`nav-${game}`)) {
+        document.getElementById(`nav-${game}`).classList.add('active');
+    }
     activeGame = game;
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`nav-${game}`).classList.add('active');
     
     document.querySelectorAll('.game-view').forEach(view => view.classList.remove('active-view'));
     document.getElementById(`view-${game}`).classList.add('active-view');
-    
-    const returnBarBtn = document.getElementById('nav-bar');
-    if (returnBarBtn) {
-        if (game === 'bar') {
-            returnBarBtn.style.display = 'none';
-        } else {
-            returnBarBtn.style.display = 'inline-block';
-        }
-    }
     
     // Ensure persistent stats are visible when playing
     const persistentStats = document.getElementById('persistent-stats');
@@ -256,7 +249,7 @@ function processGameResult(won, betAmount, winMultiplier, subtitleElementId, res
         
         if (globalWinStreak >= 5) {
             winnings = winnings * 2;
-            streakMessage = "<br><span style='color:#fbbf24; font-size:1.1rem; text-shadow: 0 0 10px rgba(251,191,36,0.5);'>🔥 STREAK BONUS: x2 WINNINGS! 🔥</span>";
+            streakMessage = "<br><span style='color:#fbbf24; font-size:1.1rem; text-shadow: 0 0 10px rgba(251,191,36,0.5);'>?? STREAK BONUS: x2 WINNINGS! ??</span>";
             if (globalWinStreak === 5) {
                 triggerGoldenCelebration();
             }
@@ -270,13 +263,13 @@ function processGameResult(won, betAmount, winMultiplier, subtitleElementId, res
             const bankBonus = winnings - originalWinnings;
             if (bankBonus > 0) {
                 const bonusPercent = ((globalSavings / 10000) * 0.5).toFixed(2);
-                bankMessage = `<br><span style='color:#34d399; font-size:0.95rem; font-weight:bold; text-shadow: 0 0 8px rgba(52,211,153,0.3);'>💰 Bank Multiplier Bonus (+${bonusPercent}%): +${bankBonus} chips!</span>`;
+                bankMessage = `<br><span style='color:#34d399; font-size:0.95rem; font-weight:bold; text-shadow: 0 0 8px rgba(52,211,153,0.3);'>?? Bank Multiplier Bonus (+${bonusPercent}%): +${bankBonus} chips!</span>`;
             }
             globalPoints += winnings;
         } else {
             if (earningsMult > 1) {
                 const bonusPercent = ((globalSavings / 10000) * 0.5).toFixed(2);
-                bankMessage = `<br><span style='color:#34d399; font-size:0.95rem; font-weight:bold; text-shadow: 0 0 8px rgba(52,211,153,0.3);'>💰 Bank Multiplier Bonus (+${bonusPercent}%) active!</span>`;
+                bankMessage = `<br><span style='color:#34d399; font-size:0.95rem; font-weight:bold; text-shadow: 0 0 8px rgba(52,211,153,0.3);'>?? Bank Multiplier Bonus (+${bonusPercent}%) active!</span>`;
             }
         }
         document.getElementById(subtitleElementId).innerHTML = `You won ${winnings} chips!${streakMessage}${bankMessage}`;
@@ -497,7 +490,7 @@ function connectMultiplayerServer() {
 
     socket.on('chat_message_receive', (data) => {
         const msgChannel = data.channel || activeChatChannel || 'Global';
-        const isBetLog = data.message && data.message.startsWith('🤖');
+        const isBetLog = data.message && data.message.startsWith('??');
         
         if (isBetLog) {
             if (!window.betLogHistory) {
@@ -752,7 +745,7 @@ function initDiceGame(isFirstLoad = false) {
 }
 
 function getDiceFace(num) {
-    const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    const faces = ['?', '?', '?', '?', '?', '?'];
     return faces[num - 1] || num;
 }
 
@@ -840,7 +833,7 @@ window.onload = () => {
         
         document.getElementById('view-auth').classList.remove('active-view');
         document.getElementById('global-nav').style.display = 'flex';
-        switchGame('bar');
+        switchGame('dice');
         
         if (currentUser.toLowerCase() === 'cupoftomato') {
             document.getElementById('nav-admin-btn').style.display = 'inline-block';
@@ -1061,7 +1054,7 @@ function initScratchCard() {
     
     // Determine outcomes: 30% win chance
     const isWin = Math.random() < 0.3;
-    const pool = ['🍒', '🍋', '🍇', '🍀', '🔔', '👑', '💎', '7', '🍅'];
+    const pool = ['??', '??', '??', '??', '??', '??', '??', '7', '??'];
     
     scratchGridSymbols = new Array(9).fill(null);
     
@@ -1168,7 +1161,7 @@ function checkScratchResult() {
     if (resultText) {
         if (winningSymbol) {
             // WINNER!
-            resultText.textContent = `🎉 MATCH 3 ${winningSymbol}! YOU WIN 40 CHIPS! 🎉`;
+            resultText.textContent = `?? MATCH 3 ${winningSymbol}! YOU WIN 40 CHIPS! ??`;
             resultText.style.color = '#34d399';
             
             globalPoints += 40;
@@ -1182,7 +1175,7 @@ function checkScratchResult() {
             triggerGoldenCelebration();
         } else {
             // LOSER
-            resultText.textContent = '❌ NO MATCH. TRY AGAIN! ❌';
+            resultText.textContent = '? NO MATCH. TRY AGAIN! ?';
             resultText.style.color = '#f87171';
         }
     }
@@ -1794,79 +1787,6 @@ function startPlayTimeTimer() {
     }, 1000);
 }
 
-// --- 2.5D Bar UI Logic ---
-
-function showBanner(text) {
-    const banner = document.getElementById('bar-game-banner');
-    const title = document.getElementById('bar-banner-title');
-    if (banner && title) {
-        title.innerText = text;
-        banner.style.top = '0px';
-    }
-}
-
-function hideBanner() {
-    const banner = document.getElementById('bar-game-banner');
-    if (banner) {
-        banner.style.top = '-100px';
-    }
-}
-
-function prepareDrink(gameId) {
-    const glass = document.getElementById('sliding-glass');
-    const overlay = document.getElementById('drink-transition-overlay');
-    const tGlass = document.getElementById('transition-glass');
-    const splash = document.getElementById('wine-splash');
-    const speech = document.getElementById('bartender-speech');
-
-    if (!glass || !overlay || !tGlass || !splash || !speech) {
-        // Fallback if elements are missing
-        switchGame(gameId);
-        return;
-    }
-
-    // Play sound if available
-    if (window.dealSound) {
-        window.dealSound.currentTime = 0;
-        window.dealSound.play().catch(e => console.log('Audio play failed', e));
-    }
-
-    // Change bartender text temporarily
-    speech.innerText = 'Coming right up!';
-
-    // Reset animations
-    glass.style.display = 'block';
-    glass.style.animation = 'none';
-    void glass.offsetWidth; // trigger reflow
-    glass.style.animation = 'slideGlass 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
-
-    // Wait for slide to finish
-    setTimeout(() => {
-        glass.style.display = 'none';
-        speech.innerText = 'Whatcha wanna drink?';
-
-        // Start fullscreen drink transition
-        overlay.style.display = 'flex';
-        tGlass.style.animation = 'none';
-        splash.style.animation = 'none';
-        void tGlass.offsetWidth;
-        
-        tGlass.style.animation = 'drinkGlass 1.2s cubic-bezier(0.6, 0.05, 0.2, 1) forwards';
-        splash.style.animation = 'splashFade 1.2s ease-in forwards';
-
-        // Wait for screen to go fully red/black, then switch game
-        setTimeout(() => {
-            switchGame(gameId);
-            
-            // Wait a bit more before hiding overlay so the new game fades in
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 300);
-        }, 1100); // 1.1s is right before the end of the 1.2s animation
-
-    }, 1200);
-}
-
 function renderPlayTimeUI() {
     const counterEl = document.getElementById('play-time-counter');
     const btnEl = document.getElementById('claim-time-reward-btn');
@@ -1961,13 +1881,13 @@ function toggleYoutubePlayPause(event) {
         isYoutubePlaying = false;
         if (vinylBtn) vinylBtn.classList.remove('playing');
         if (vinylDisk) vinylDisk.classList.remove('spinning');
-        if (playBtn) playBtn.textContent = '▶';
+        if (playBtn) playBtn.textContent = '?';
     } else {
         ytBgPlayer.playVideo();
         isYoutubePlaying = true;
         if (vinylBtn) vinylBtn.classList.add('playing');
         if (vinylDisk) vinylDisk.classList.add('spinning');
-        if (playBtn) playBtn.textContent = '⏸';
+        if (playBtn) playBtn.textContent = '?';
     }
 }
 
@@ -2032,7 +1952,7 @@ function applyCustomMusic(event) {
         
         if (vinylBtn) vinylBtn.classList.add('playing');
         if (vinylDisk) vinylDisk.classList.add('spinning');
-        if (playBtn) playBtn.textContent = '⏸';
+        if (playBtn) playBtn.textContent = '?';
         
         inputEl.value = ''; // clear input
     } else {
@@ -2041,4 +1961,12 @@ function applyCustomMusic(event) {
         globalPoints += 100;
         updateGlobalStats();
     }
+}
+
+function selectLobbyGame(game) {
+    if (!currentUser) {
+        document.getElementById('view-auth').classList.remove('active-view');
+        document.getElementById('global-nav').style.display = 'flex';
+    }
+    switchGame(game);
 }
