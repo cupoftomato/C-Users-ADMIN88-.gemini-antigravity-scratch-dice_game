@@ -177,6 +177,12 @@ function switchGame(game) {
     if (document.getElementById(`nav-${game}`)) {
         document.getElementById(`nav-${game}`).classList.add('active');
     }
+    
+    const returnBtn = document.getElementById('nav-return-hub');
+    if (returnBtn) {
+        returnBtn.style.display = (game === 'hub') ? 'none' : 'block';
+    }
+    
     activeGame = game;
     
     document.querySelectorAll('.game-view').forEach(view => view.classList.remove('active-view'));
@@ -833,7 +839,7 @@ window.onload = () => {
         
         document.getElementById('view-auth').classList.remove('active-view');
         document.getElementById('global-nav').style.display = 'flex';
-        switchGame('dice');
+        switchGame('hub');
         
         if (currentUser.toLowerCase() === 'cupoftomato') {
             document.getElementById('nav-admin-btn').style.display = 'inline-block';
